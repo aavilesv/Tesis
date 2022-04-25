@@ -5,7 +5,7 @@ from django.utils import timezone
 class M_PROVEEDOR(models.Model):
     nombre = models.CharField(max_length=200, verbose_name="EMPRESA",default='')
     direccion = models.CharField(max_length=200,verbose_name="DIRECCION",default='')
-    sitioweb = models.CharField(max_length=200, verbose_name="DIRECCION", default='')
+    sitioweb = models.CharField(max_length=200, verbose_name="sitioweb", default='')
     telefono = models.CharField(max_length=10,verbose_name="TELEFONO",default='')
     fecharegistro = models.DateTimeField(default=timezone.now(), blank=True)
     ced_ruc = models.CharField(max_length=13, verbose_name="Cedula o Ruc",default='')
