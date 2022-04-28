@@ -2,21 +2,20 @@
 {% load static %}
 {% block contenid %}
 
-
         <div class="card">
             <div class="card-header">
                 <div class="form-group text">
                     <ul class="list-inline">
                         <li class="list-inline-item">
                                     <span class="badge badge-secondary">
-                                    <i class="fa fa-building fa-2x"></i></span></li>
+                                    <i class="fa fa-font fa-2x"></i></span></li>
                         <li class="list-inline-item">     <h2 class="text-secondary"><strong>
-                                 {% if  sucursal.count == 1 %}
+                            {% if  articulo.count == 1 %}
                             {{ model }}
-                                {% elif sucursal.count > 1 %}
-                                {{ model }}es
-                                     {% else  %}
-                                     {{ model }}
+                            {% elif articulo.count > 1 %}
+                                {{ model }}s
+                                {% else %}
+                                {{ model }}
                         {% endif %}</strong></h2>
                         </li>
                     </ul>
@@ -25,10 +24,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="form-group text">
-                            <br>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
+
+                        <div class="row">
+                            <div class="col-5">
+
+                                <div class="form-group">
+                                    <br>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
                                 <span class="hint--bottom-left  hint--success"
                                       aria-label="Nuevo Registro">
                                     <button  onclick="myFunction('{{ ruta }}?action=add&id='+ '{{ sucur.id }}')"
@@ -37,20 +40,56 @@
 
                                     <i class="fa fa-plus"></i>
                                 </button></span>
-                                </li>
-                                <li class="list-inline-item">
-                                  <span class="hint--bottom-left  hint--info" aria-label="Imprimir">
+                                        </li>
 
-                                      <a
-                                                    href="{{ ruta }}?imprime=imprimir"
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <br>
+                                <form class="" method="GET" action="{{ ruta }}">
+                                <input type="hidden" name="buscarid" value="{{ buscarid }}">
+                                    <div class="form-group">
+                                        <ul class="list-inline">
+
+                                            <li class="list-inline-item">
+                                                <label for="sucursal" class="control-label mb-1">
+                                                    <span class="badge badge-info">Imprimir por Sucursal:</span>
+                                                </label>
+                                                <select class="chosen-select form-control list" id="sucursal" name="sucursa"
+                                                        data-placeholder="Sucursal">
+                                                    {% if sucursale %}
+                                                        <option value="{{ sucursale.id }}"   >seleccionada: {{ sucursale.razonsocial }}</option>
+                                                    {% endif %}
+                                                    <option value="0" selected>Todas las Sucursales</option>
+                                                    {% for g in sucursal %}
+                                                        <option value="{{ g.id }}">{{ g.razonsocial }}</option>
+                                                    {% endfor %}
+                                                </select></li>
+                                            <li class="list-inline-item">
+                                <span class="hint--bottom-left  hint--info"
+                                      aria-label="Buscar por Sucursal">
+                                    <button  id=""
+                                             class="btn btn-info btn-md"  >
+
+                                    <i class="fa  fa-search"></i>
+                                </button></span>
+                                            </li>
+                                            <li class="list-inline-item">
+                                    <span class="hint--bottom-left  hint--info" aria-label="Imprimir">
+                                            <a
+                                                    href="{{ ruta }}?imprime=imprimir&buscarid={{ buscarid }}"
                                                     class="btn btn-outline-info btn-md hint--bottom-left  hint--info"
                                                     data-original-title="Imprimir"  target="_blank">
                                                 <i class="ti-printer"></i>
                                             </a>
                                     </span>
-                                </li>
-                            </ul>
-                        </div>
+                                            </li>
+                                        </ul>
+                                    </div></form>
+
+                            </div>
+                        </div><hr>
                         <div class="content-panel">
                             <div class="table-responsive">
                                 <table id="" cellspacing="0" width="100%"
@@ -60,29 +99,39 @@
                                         <th>
                                             <i class="fa fa-image" aria-hidden="true"> Foto</i>
                                         </th>
+
                                         <th>
-                                            <i class="fa fa-user-circle-o" aria-hidden="true"> Razón social</i>
-                                        </th>
-                                        <th>
-                                            <i class="fa fa-address-card" aria-hidden="true"> Ruc</i>
-                                        </th>
-                                        <th>
-                                            <i class="fa fa-phone" aria-hidden="true"> Telefono</i>
+                                            <i class="fa fa-building" aria-hidden="true"> Sucursal</i>
                                         </th>
                                         <th>
                                             <i class="fa fa-home" aria-hidden="true"> Dirección</i>
                                         </th>
                                         <th>
-                                            <i class="fa fa-envelope" aria-hidden="true"> Email</i>
+                                            <i class="fa fa-circle" aria-hidden="true"> Marca</i>
                                         </th>
                                         <th>
-                                            <span class="ti-image"></span> Ciudad
+                                            <i class="fa fa-square" aria-hidden="true"> Nombre</i>
                                         </th>
                                         <th>
-                                            <i class="fa fa-flag-o" aria-hidden="true"> Provincia</i>
+                                            <i class="fa fa-square" aria-hidden="true"> Descripción</i>
+                                        </th>
+                                        <th>
+                                            % Descuento
+                                        </th>
+                                        <th>
+                                            <i class="fa fa-circle" aria-hidden="true"> Stock</i>
+                                        </th>
+                                        <th>
+                                            % Iva
+                                        </th>
+                                        <th>
+                                            <i class="fa fa-money" aria-hidden="true"> Subtotal</i>
+                                        </th>
+
+                                        <th><i class="fa fa-money">Precio</i>
+
                                         </th>
                                         <th><i class="fa  fa-check-square-o">Estado</i>
-
                                         </th>
                                         <th >
                                             <i class="fa fa-cog" aria-hidden="true"> Acción</i>
@@ -90,46 +139,55 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for sucur in sucursal %}
+                                    {% for articu in articulo %}
                                         <tr class="p-0 m-0">
                                             <td class="p-2 m-0">
                                          <span class="hint--top-right hint--info"
                                                aria-label="Ver imagen">
                                         <div class="pull-left image">
-                                            <center> <a href="/media/{{ sucur.image }}" data-lightbox="mygallery"
-                                                        data-title="{{ sucur.nombre }}"><img  src="/media/{{ sucur.image }}" title="ver imagen" class="img-fluid center" alt="Responsive image" style="width:100px; height:100px;"  ></a> </center>
-                                        </div></span>
+                                            <center> <a href="/media/{{ articu.image }}" data-lightbox="mygallery"
+                                                        data-title="{{ articu.nombre }}">
+                                                <img  src="/media/{{ articu.image }}" title="ver imagen"
+                                                      class="img-fluid center" alt="Responsive image"
+                                                      style="width:100px; height:100px;"  ></a> </center>
+                                        </div>
+                                         </span>
                                             </td>
-                                            <td class="p-2 m-0">{{ sucur.razonsocial }}</td>
-                                            <td class="p-2 m-0">{{ sucur.ruc }}</td>
-                                            <td class="p-2 m-0">{{ sucur.celular }}</td>
-                                            <td class="p-2 m-0">{{ sucur.direcion }}</td>
-                                            <td class="p-2 m-0">{{ sucur.email }}</td>
-                                            <td class="p-2 m-0">{{ sucur.canton }}</td>
-                                            <td class="p-2 m-0">{{ sucur.provincia }}</td>
+                                            <td class="p-2 m-0">{{ articu.sucursal.razonsocial }}</td>
+                                            <td class="p-2 m-0">{{ articu.sucursal.direcion }}</td>
+
+                                            <td class="p-2 m-0">{{ articu.marca.nombre }}</td>
+                                            <td class="p-2 m-0">{{ articu.nombre }}</td>
+                                            <td class="p-2 m-0">{{ articu.descripcion }}</td>
+                                            <td class="p-2 m-0">%{{ articu.descuento }}</td>
+                                            <td class="p-2 m-0">{{ articu.stock }}</td>
+                                            <td class="p-2 m-0">%{{ articu.iva }}</td>
+                                            <td class="p-2 m-0">&#36;{{ articu.subtotal }}</td>
+
+                                            <td class="p-2 m-0">&#36;{{ articu.precio }}</td>
                                             <td class="p-2 m-0">
-                                                {% if sucur.status %}
+                                                {% if articu.status %}
                                                     <span class="badge badge-success">Activo</span>
                                                 {% else %}
-                                                    <span class="badge badge-danger">Cerrado</span>
+                                                    <span class="badge badge-danger">Inactivo</span>
                                                 {% endif %}
                                             </td>
                                             <td class="p-2 m-0">
-                                                <button  onclick="myFunction('{{ ruta }}?action=ver&id='+ '{{ sucur.id }}')"
+                                                <button  onclick="myFunction('{{ ruta }}?action=ver&id='+ '{{ articu.id }}')"
                                                          data-backdrop="static" data-keyboard="false" class="btn btn-success btn-sm rounded-circle"  value="1"
                                                          href="#mdsucur"  rel="action" data-toggle="modal">
                                     <span class="hint--bottom-left  hint--success"
                                           aria-label="Ver">
                                     <i class="ti-eye"></i></span>
                                                 </button>
-                                                <button onclick="myFunction('{{ ruta }}?action=edit&id='+ '{{ sucur.id }}')"
+                                                <button onclick="myFunction('{{ ruta }}?action=edit&id='+ '{{ articu.id }}')"
                                                         href="#mdsucur"  rel="action" data-toggle="modal"
                                                         data-backdrop="static" data-keyboard="false"  class="btn btn-primary rounded-circle btn-sm edit">
                                     <span class="hint--bottom-left  hint--info"
                                           aria-label="Editar"><i class="fa fa-pencil"></i>
                                     </span>
                                                 </button>
-                                                <button onclick="myFunction('{{ ruta }}?action=elim&id='+ '{{ sucur.id }}')" href="#mdsucur" data-toggle="modal" rel="action"
+                                                <button onclick="myFunction('{{ ruta }}?action=elim&id='+ '{{ articu.id }}')" href="#mdsucur" data-toggle="modal" rel="action"
                                                         data-backdrop="static" data-keyboard="false"  class="btn btn-danger rounded-circle btn-sm button"   data-toggle="modal">
                                     <span class="hint--bottom-left  hint--error"
                                           aria-label="Eliminar"><i class="fa fa-trash-o "></i>
@@ -172,29 +230,14 @@
                 });
             {% endfor %}
         {% endif %}
-        $("#btnPdf").click(function() {
-            alert("Handler for .click() called.");
-            $.ajax({
-                type:"GET",
-                url: '{{ ruta }}',
-                data: {
-                    'action':'imprimir'
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.resp == true) {
-                        window.location.reload();
-                    } else {
-                        alert('holasdsd');
-                    }
-                }
-            });
-        });
+
         function myFunction(url) {
             $('#mdsucur').load(url,function () {
                 $('#mdsucur').modal({backdrop: 'static', keyboard: false,show:true,remote:false});
             });
             return false;
         }
+
+        $('.chosen-select').chosen();
     </script>
 {% endblock %}
