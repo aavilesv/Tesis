@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+'''from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from sistemafinal.funciones import addUserData, render_to_pdf
 import datetime
@@ -121,4 +121,4 @@ def estadistica(request):
     #     month = months[month - 1]
     #     return month
     #
-    # data['cliente'],data['compra'],data['venta']=Cliente.objects.exclude(nombre__icontains='Consumir Final').count(),Compra.objects.count(),Venta.objects.count()
+    # data['cliente'],data['compra'],data['venta']=Cliente.objects.exclude(nombre__icontains='Consumir Final').count(),Compra.objects.count(),Venta.objects.count()'''

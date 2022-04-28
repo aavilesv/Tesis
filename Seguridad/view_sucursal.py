@@ -1,4 +1,4 @@
-from django.contrib import messages
+'''from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -77,4 +77,4 @@ def sucursal(request):
         else:
             # La primera vez viaje por get sin criterio: consulta todos los datos
             data['sucursal']=Sucursal.objects.filter(elim=True)
-        return render(request, 'seguridad/sucursal.html', data)
+        return render(request, 'seguridad/sucursal.html', data)'''

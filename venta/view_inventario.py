@@ -1,4 +1,4 @@
-from django.contrib import messages
+'''from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from sistemafinal.funciones import addUserData, MiPaginador
 from django.db import transaction
@@ -88,4 +88,4 @@ def inventario(request):
             data['rangospaging'] = paging.rangos_paginado(p)
             data['page'] = page
             data['articulos'] = page.object_list
-            return render(request, 'inventario/articulo.html', data)
+            return render(request, 'inventario/articulo.html', data)'''

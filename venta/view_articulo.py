@@ -1,4 +1,4 @@
-from django.contrib import messages
+'''from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from seguridad.models import Sucursal, Empresa
@@ -92,4 +92,4 @@ def articulo(request):
             data['marc'],data['sucursa']=Marca.objects.filter(elim=True),Sucursal.objects.filter(elim=True)
             return render(request, 'inventario/articulo_modal.html', data)
 
-        return render(request, 'inventario/articulo.html', data)
+        return render(request, 'inventario/articulo.html', data)'''

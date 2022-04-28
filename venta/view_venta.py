@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+'''from django.contrib.auth.models import User
 from django.db.models import Q
 from inventario.models import Articulo
 from sistemafinal.funciones import addUserData, render_to_pdf
@@ -139,4 +139,4 @@ def venta(request):
     else:
         # Viaja por get
         data['venta'] =  Venta.objects.all().order_by('id')
-        return render(request, 'venta/Venta.html', data)
+        return render(request, 'venta/Venta.html', data)'''

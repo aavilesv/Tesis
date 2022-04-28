@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+'''from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -72,4 +72,4 @@ def cliente(request):
         else:
             # Viaja por get
             data['cliente'] = Cliente.objects.filter(status=True)
-            return render(request, 'venta/cliente.html', data)
+            return render(request, 'venta/cliente.html', data)'''

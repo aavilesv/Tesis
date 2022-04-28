@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+'''from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -69,7 +69,7 @@ def proveedor(request):
 
 
             return render(request, 'compra/proveedor_modal.html', data)
-  '''      elif 'imprime' in request.GET:
+        elif 'imprime' in request.GET:
 
             proveedor = {
 
@@ -77,10 +77,10 @@ def proveedor(request):
             }
             pdf = render_to_pdf('compra/pdfproveedor.html', proveedor)
             return HttpResponse(pdf, content_type='application/pdf')
-'''
+
 
         else:
             # Viaja por get
             proveedor = M_PROVEEDOR.objects.filter(status=True)
             data['proveedor'] = proveedor
-            return render(request, 'compra/Proveedor.html', data)
+            return render(request, 'compra/Proveedor.html', data)'''

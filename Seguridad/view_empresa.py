@@ -1,4 +1,4 @@
-from django.contrib import messages
+'''from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from sistemafinal.funciones import addUserData
@@ -45,4 +45,4 @@ def empresa(request):
             #primera vez viaja por get : consulta todos los datos
             empresa= Empresa.objects.filter(status=True)
             data['empresa']=empresa
-            return render(request, 'seguridad/empresa.html', data)
+            return render(request, 'seguridad/empresa.html', data)'''

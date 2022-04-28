@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+'''from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from sistemafinal.funciones import addUserData, render_to_pdf
 import datetime
@@ -106,4 +106,4 @@ def usuariote(request):
         else:
             # Viaja por get
             data['empleado'] = Empleado.objects.filter(status=True)
-            return render(request, 'seguridad/usuariote.html', data)
+            return render(request, 'seguridad/usuariote.html', data)'''

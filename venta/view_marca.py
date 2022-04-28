@@ -1,4 +1,4 @@
-from django.contrib import messages
+'''from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -69,4 +69,4 @@ def marca(request):
         else:
             # Viaja por get
             data['marca']=Marca.objects.filter(elim=True)
-            return render(request, 'inventario/marca.html', data)
+            return render(request, 'inventario/marca.html', data)'''
