@@ -1,4 +1,4 @@
-'''from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -73,7 +73,7 @@ def proveedor(request):
 
             proveedor = {
 
-                'proveedor':Proveedor.objects.filter(status=True), 'empresa': Empresa.objects.first(),'model':'Proveedor'
+                'proveedor':M_PROVEEDOR.objects.filter(status=True)#, 'empresa': Empresa.objects.first(),'model':'Proveedor'
             }
             pdf = render_to_pdf('compra/pdfproveedor.html', proveedor)
             return HttpResponse(pdf, content_type='application/pdf')
@@ -83,4 +83,4 @@ def proveedor(request):
             # Viaja por get
             proveedor = M_PROVEEDOR.objects.filter(status=True)
             data['proveedor'] = proveedor
-            return render(request, 'compra/Proveedor.html', data)'''
+            return render(request, 'compra/Proveedor.html', data)

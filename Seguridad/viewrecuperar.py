@@ -1,4 +1,4 @@
-'''from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.contrib import messages
 from random import choice
 from django.db import transaction
@@ -47,4 +47,4 @@ def recuperar(request):
                 messages.error(request, str(ex))
             return redirect('/seguridad/recuperar/')
     else:
-         return render(request, 'seguridad/recuperarlogin.html',data)'''
+         return render(request, 'seguridad/recuperarlogin.html',data)

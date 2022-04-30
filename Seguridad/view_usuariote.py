@@ -1,8 +1,7 @@
-'''from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
-from sistemafinal.funciones import addUserData, render_to_pdf
+from Tesis.funciones import addUserData, render_to_pdf
 import datetime
-from seguridad.models import Empleado, Sucursal, Empresa
 import json
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -34,14 +33,14 @@ def usuariote(request):
                                                       password=request.POST['password'],
                                                       is_active=True, is_staff=False, is_superuser=False)
                         us.groups.add(Group.objects.get(pk=int(request.POST['group'])))
-                        empleado = Empleado()
+                        empleado = User()
                         empleado.direcion,empleado.cedula,empleado.celular =request.POST['direcion'], request.POST['cedula'], request.POST['celular']
-                        empleado.sucursal, empleado.image,empleado.fecha =  Sucursal.objects.get(pk=int(request.POST['sucursal'])),request.FILES['image'],datetime.datetime.now()
+                        #empleado.sucursal, empleado.image,empleado.fecha =  Sucursal.objects.get(pk=int(request.POST['sucursal'])),request.FILES['image'],datetime.datetime.now()
                         empleado.user,empleado.group =us,Group.objects.get(pk=int(request.POST['group']))
                         empleado.save()
 
                     if action == 'edit':
-                        empleado = Empleado.objects.get(pk=int(request.POST['id']))
+                        empleado = User.objects.get(pk=int(request.POST['id']))
                         us=User.objects.get(pk=int(empleado.user.id))
                         if (request.POST['chancontr']) == '1':
                             us.set_password(request.POST['password'])
@@ -55,13 +54,13 @@ def usuariote(request):
                             empleado.group=Group.objects.get(pk=int(request.POST['group']))
                         empleado.user,empleado.direcion,empleado.cedula   =us,request.POST['direcion'], request.POST['cedula']
                         empleado.celular = request.POST['celular']
-                        empleado.sucursal  = Sucursal.objects.get(pk=int(request.POST['sucursal']))
+                        empleado.sucursal  = User.objects.get(pk=int(request.POST['sucursal']))
                         if 'image' in request.FILES:
                             empleado.image = request.FILES['image']
                         empleado.save()
 
                     if action == 'elim':
-                        empleado = Empleado.objects.get(pk=int(request.POST['id']))
+                        empleado = User.objects.get(pk=int(request.POST['id']))
                         User.objects.get(pk=empleado.user_id)
                         empleado.status = False
                         empleado.save()
@@ -79,8 +78,8 @@ def usuariote(request):
             data['action'] = request.GET['action']
             if not (request.GET['action'] == 'add' or request.GET['action'] == 'verificar'):
                 data['id'] = request.GET['id']
-                data['empleado'] = Empleado.objects.get(pk=int(request.GET['id']))
-            data['sucursal'],data['group'] = Sucursal.objects.filter(elim=True), Group.objects.all()
+                data['empleado'] = User.objects.get(pk=int(request.GET['id']))
+            data['group'] =  Group.objects.all()
             if request.GET['action'] == 'verificar':
                 try:
                     with transaction.atomic():
@@ -98,12 +97,12 @@ def usuariote(request):
 
             usuario = {
 
-                'usuario':Empleado.objects.filter(status=True), 'empresa': Empresa.objects.first(),'model':'Usuario'
+                'usuario':User.objects.filter(status=True), 'empresa': User.objects.first(),'model':'Usuario'
             }
             pdf = render_to_pdf('seguridad/pdfusuario.html', usuario)
             return HttpResponse(pdf, content_type='application/pdf')
 
         else:
             # Viaja por get
-            data['empleado'] = Empleado.objects.filter(status=True)
-            return render(request, 'seguridad/usuariote.html', data)'''
+            data['empleado'] = User.objects.filter(status=True)
+            return render(request, 'seguridad/usuariote.html', data)

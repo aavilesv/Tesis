@@ -1,17 +1,16 @@
-'''from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 from django.db.models import Q
-from inventario.models import Articulo
-from sistemafinal.funciones import addUserData, render_to_pdf
+from venta.models import M_Producto
+from Tesis.funciones import addUserData, render_to_pdf
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import transaction ,IntegrityError
-from seguridad.models import Empleado, Sucursal, Empresa
 from django.utils.html import strip_tags
 import datetime
 import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from venta.models import Venta, Cliente, DetalleVenta
+from venta.models import T_Factura,T_Facturadetalle,M_Producto,M_CLIENTE
 @login_required(login_url='/seguridad/login/')
 def venta(request):
     data ={
@@ -28,19 +27,19 @@ def venta(request):
                 with transaction.atomic():
 
                     if action == 'elim':
-                        venta = Venta.objects.get(pk=int(request.POST['id']))
+                        venta = T_Factura.objects.get(pk=int(request.POST['id']))
                         venta.status = False
                         venta.usermodificardor, venta.userfechamodificador= int(request.user.id),datetime.datetime.now()
 
                         venta.save()
-                        e = Empleado.objects.get(user=request.user)
 
-                        for item in DetalleVenta.objects.filter(venta=venta):
+
+                        for item in T_Facturadetalle.objects.filter(venta=venta):
 
                             print(item.articulo.id)
-                            if Articulo.objects.filter(sucursal=Sucursal.objects.get(pk=e.sucursal.id)).exists():
+                            if M_Producto.objects.filter(sucursal=M_CLIENTE.objects.get(pk=1)).exists():
                                 print('entrar')
-                                arct=(Articulo.objects.get(pk=int(item.articulo.id)))
+                                arct=(M_Producto.objects.get(pk=int(item.articulo.id)))
 #                                arct= Articulo.objects.get(Q(sucursal=Sucursal.objects.filter(pk=e.sucursal.id)) & Q(pk=int(item.articulo.id)))
                                 arct.stock += int(item.cantidad)
                                 arct.save()
@@ -57,24 +56,24 @@ def venta(request):
             try:
                 with transaction.atomic():
                     ventajson = json.loads(request.GET['venta'])
-                    vent = Venta()
-                    vent.cliente,vent.iva = Cliente.objects.get(pk=int(ventajson['cliente'])),round(float(ventajson['subtotal']) * 0.12)
+                    vent = T_Factura()
+                    vent.cliente,vent.iva = M_CLIENTE.objects.get(pk=int(ventajson['cliente'])),round(float(ventajson['subtotal']) * 0.12)
                     vent.subtotal ,vent.total  = round(float(ventajson['subtotal'])), round(float(ventajson['total']))
                     vent.fechaventa,vent.descuento = datetime.datetime.now(),0
                     vent.user = (request.user)
                     vent.userfecha=datetime.datetime.now()
-                    e=Empleado.objects.get(user=request.user)
-                    vent.sucursal = Sucursal.objects.get(pk=e.sucursal.id)
-                    vent.usermodificardor,vent.userfechamodificador,vent.empresa = 0,datetime.datetime.now(), Empresa.objects.get(pk=1)
+                    e=T_Factura.objects.get(user=request.user)
+                    vent.sucursal = T_Factura.objects.get(pk=e.sucursal.id)
+                    vent.usermodificardor,vent.userfechamodificador,vent.empresa = 0,datetime.datetime.now(), M_CLIENTE.objects.get(pk=1)
                     vent.save()
 
                     for item in ventajson['items']:
 
-                        if Articulo.objects.filter(id=int(item['id'])).exists():
-                            detalle = DetalleVenta()
-                            detalle.venta,detalle.articulo = vent, Articulo.objects.get(pk=int(item['id']))
+                        if M_Producto.objects.filter(id=int(item['id'])).exists():
+                            detalle = T_Factura()
+                            detalle.venta,detalle.articulo = vent, M_Producto.objects.get(pk=int(item['id']))
                             detalle.cantidad,detalle.total  =int(item['cantidad']), float(item['precio'])
-                            arct = Articulo.objects.get(pk=int(item['id']))
+                            arct = M_Producto.objects.get(pk=int(item['id']))
                             arct.stock -= int(item['cantidad'])
                             arct.save()
                             detalle.preciototal = round(float(item['precio'])*int(item['cantidad']))
@@ -99,27 +98,26 @@ def venta(request):
                 return HttpResponse(json.dumps({"resp": False, "mensaje": str(ex)}),
                                     content_type="application/json")
         if action == 'add':
-            data['cliente'],data['articul'] = Cliente.objects.filter(status=True),Articulo.objects.filter(precio__gte=1,elim=True)
+            data['cliente'],data['articul'] = M_CLIENTE.objects.filter(status=True),M_Producto.objects.filter(precio__gte=1,elim=True)
             return render(request, 'venta/venta_form.html', data)
 
         if action == 'ver':
             id = request.GET['id']
-            v=Venta.objects.get(pk=id)
-            data['venta'],data['detalle'] =v,DetalleVenta.objects.filter(venta=Venta.objects.get(pk=id)).order_by('articulo_id')
+            v=T_Factura.objects.get(pk=id)
+            data['venta'],data['detalle'] =v,T_Facturadetalle.objects.filter(venta=T_Factura.objects.get(pk=id)).order_by('articulo_id')
 
             return render(request, 'venta/venta_visualizar.html', data)
 
 
     elif 'imprimeunidad' in request.GET:
         id = request.GET['id']
-        v=Venta.objects.get(pk=int(id))
+        v=T_Factura.objects.get(pk=int(id))
         t = "0"
         for i in range(9-len(str(v.id))):
             t+="0"
         factura = {
 
-            'venta': DetalleVenta.objects.filter(venta=Venta.objects.get(pk=id)).order_by('articulo_id'),
-            'empresa': Empresa.objects.first(),
+            'venta': T_Facturadetalle.objects.filter(venta=T_Factura.objects.get(pk=id)).order_by('articulo_id'),
             'facturaa':v,
             'model': 'Factura: '+t+str(v.id)
         }
@@ -130,13 +128,12 @@ def venta(request):
 
         cliente = {
 
-            'venta': Venta.objects.all(),
-            'empresa': Empresa.objects.first(),
+            'venta': T_Factura.objects.all(),
             'model': 'Factura'
         }
         pdf = render_to_pdf('venta/pdfventa.html', cliente)
         return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get
-        data['venta'] =  Venta.objects.all().order_by('id')
-        return render(request, 'venta/Venta.html', data)'''
+        data['venta'] =  T_Factura.objects.all().order_by('id')
+        return render(request, 'venta/Venta.html', data)
