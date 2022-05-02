@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from Tesis.funciones import addUserData, render_to_pdf
 from django.db import transaction
@@ -86,10 +86,11 @@ def articulo(request):
 
         elif 'action' in request.GET:
             data['action'] = request.GET['action']
-            if not (request.GET['action'] == 'add') :
+            if  (request.GET['action'] == 'add') :
                 data['id'] = request.GET['id']
-                data['articulo']= M_Producto.objects.get(pk=int(request.GET['id']))
+                data['articulo']= M_Producto.objects.filter(status=True)
+                return JsonResponse(data)
+            return JsonResponse(data)
             data['marc']=M_Marca.objects.filter(status=True)
-            return render(request, 'inventario/articulo_modal.html', data)
 
-        return render(request, 'inventario/articulo.html', data)
+        return  render(request, 'inventario/articulo.html', data)

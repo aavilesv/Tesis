@@ -53,7 +53,7 @@
             <span class="nav-link-text ms-1">{{ grupo.nombre }}</span>
           </a>
           <div class="collapse " id="{{ grupo.nombre }}">
-            <ul class="nav ms-4 ps-3">
+            <ul class="treeview-menu">
                 {% for modulo in grupo.modulos_activos %}
                     <li class="nav-item">
                       <a class="nav-link " href="{{ modulo.url }}">
@@ -246,7 +246,7 @@
             <div class="col-lg-6">
               <ul class="nav nav-footer justify-content-center justify-content-lg-end">
                 <li class="nav-item">
-                  <a href="" class="nav-link text-muted" target="_blank">Creative Tim</a>
+                  <a href="" class="nav-link text-muted" target="_blank">Susanita</a>
                 </li>
                 <li class="nav-item">
                   <a href="" class="nav-link text-muted" target="_blank">About Us</a>
@@ -254,9 +254,7 @@
                 <li class="nav-item">
                   <a href="" class="nav-link text-muted" target="_blank">Blog</a>
                 </li>
-                <li class="nav-item">
-                  <a href="" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                </li>
+
               </ul>
             </div>
           </div>
@@ -369,6 +367,9 @@
     <script src="{% static "js/select2.min.js" %}"></script>
     <script src="{% static "js/jquery.numeric.js" %}" type="text/javascript"></script>
     <script src="{% static "js/funciones_validacion.js" %}" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
     $(() => {
   $('button').on('click', e => {
