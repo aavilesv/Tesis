@@ -1,6 +1,86 @@
-
+{% extends 'ProjectBody/Body.html' %}
 {% load static %}
-{% block frmodal %}
+{% block contenid %}
+    <div class="row mt-4">
+        <div class="col-12">
+
+            <div class="card">
+                <!-- Card header -->
+                <div class="card">
+                    <div class="card-header d-flex align-items-center border-bottom py-3">
+                        <div class="text-center ms-auto">
+                            <h5 class="mb-0">Productos</h5>
+                            <p class="text-sm mb-0">
+                                Ingreso de productos
+                            </p>
+                        </div>
+                        <div class="text-end ms-auto">
+
+                            <button type="button" class="btn btn-sm bg-gradient-primary mb-0"  id="cancelar" onclick="window.location='{{ ruta }}'">
+                                <i class="fa fa-undo"></i> Volver
+                            </button>
+                            <button type="button" class="btn btn-sm bg-gradient-success mb-0" id="btn-registrar">
+                                <i class="fas fa-plus pe-2"></i> Registar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                     <select class="form-control chosen-select" name="choices-button" id="choices-button" placeholder="Departure">
+  <option value="Choice 1" selected="">Brazil</option>
+  <option value="Choice 2">Bucharest</option>
+  <option value="Choice 3">London</option>
+  <option value="Choice 4">USA</option>
+</select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Regular" class="form-control" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group mb-4">
+                                            <span class="input-group-text"><i class="ni ni-zoom-split-in"></i></span>
+                                            <input class="form-control" placeholder="Search" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group mb-4">
+                                         <div class="form-check form-switch">
+  <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked="">
+  <label class="form-check-label" for="flexSwitchCheckDefault">Checked switch</label>
+</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group has-success">
+                                        <input type="text" placeholder="Success" class="form-control is-valid" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group has-danger">
+                                        <input type="email" placeholder="Error Input" class="form-control is-invalid" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,8 +217,8 @@
                                                 <input type="number" class="form-control " name="iva" minlength="1"
                                                        maxlength="133" onKeyPress="return soloNumeros(event)"
                                                        min="12" max="12" id="iva" {% if articulo.iva %} value ='{{ articulo.iva }}' {% else %}
-                                               value ='12'
-                                        {% endif %} required="true" >
+                                                       value ='12'
+                                                {% endif %} required="true" >
                                             </div></div></div>
                                 </div>
                             </div>
@@ -203,7 +283,7 @@
 {% endblock %}
 {% block jscript %}
     <script type='text/javascript'>
-    $('#precio').val($('#precio').val().replace(',', '.'));
+        $('#precio').val($('#precio').val().replace(',', '.'));
 
 
         $('.chosen-select').chosen();
@@ -267,19 +347,19 @@
                     imageAlt: 'Custom image',
                 });
             }});
-         $('#descuento').on('change',function () {
-                var precio=0,iva=0
-                    precio=(parseFloat($("#subtotall").val())*(parseFloat($("#iva").val())/100)+parseFloat($("#subtotall").val()));
-                precio=precio.toFixed(2)-(parseFloat($("#descuento").val())/100)*precio
-                  $("#precio").val(precio.toFixed(2));
-                   $("#precio").prop("disabled", true);
+        $('#descuento').on('change',function () {
+            var precio=0,iva=0
+            precio=(parseFloat($("#subtotall").val())*(parseFloat($("#iva").val())/100)+parseFloat($("#subtotall").val()));
+            precio=precio.toFixed(2)-(parseFloat($("#descuento").val())/100)*precio
+            $("#precio").val(precio.toFixed(2));
+            $("#precio").prop("disabled", true);
         });
-      $('#iva').on('change',function () {
-                var precio=0,iva=0
-                    precio=(parseFloat($("#subtotall").val())*(parseFloat($("#descuento").val())/100)+parseFloat($("#subtotall").val()));
-                precio=precio.toFixed(2)-(parseFloat($("#descuento").val())/100)*precio
-                  $("#precio").val(precio.toFixed(2));
-                  $("#precio").prop("disabled", true);
+        $('#iva').on('change',function () {
+            var precio=0,iva=0
+            precio=(parseFloat($("#subtotall").val())*(parseFloat($("#descuento").val())/100)+parseFloat($("#subtotall").val()));
+            precio=precio.toFixed(2)-(parseFloat($("#descuento").val())/100)*precio
+            $("#precio").val(precio.toFixed(2));
+            $("#precio").prop("disabled", true);
         });
         $('#subtotall').on('change',function () {
 
@@ -308,10 +388,10 @@
                 });
             }else {
                 var precio=0,iva=0
-                    precio=(parseFloat($("#subtotall").val())*(parseFloat($("#iva").val())/100)+parseFloat($("#subtotall").val()));
+                precio=(parseFloat($("#subtotall").val())*(parseFloat($("#iva").val())/100)+parseFloat($("#subtotall").val()));
                 var descuent =(parseFloat($("#descuento").val())/100)*precio;
-                  $("#precio").val(precio.toFixed(2)-(descuent.toFixed()));
-                    $("#precio").prop("disabled", true);
+                $("#precio").val(precio.toFixed(2)-(descuent.toFixed()));
+                $("#precio").prop("disabled", true);
             }
 
         });

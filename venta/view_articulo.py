@@ -9,9 +9,9 @@ from venta.models import M_Producto,M_Marca,M_Ubicacion,M_TipoCategoria
 @login_required(login_url='/seguridad/login/')
 def articulo(request):
     data ={
-        'titulo':'Consulta de artículos -FULL AUTO MILAGRO',
+        'titulo':'Consulta de Productos',
         'model': 'Artículo',
-        'ruta':'/inventario/articulo/',
+        'ruta':'/venta/articulo/',
         'user': request.user.username,
     }
     addUserData(request, data)
@@ -56,7 +56,7 @@ def articulo(request):
             return redirect('/inventario/articulo/')
     else:
         # Por primera vez viaja por Get
-        data['articulo'],data['buscarid'] = M_Producto.objects.filter(status=True),0
+
         if 'sucursa' in request.GET:
             if M_Producto.objects.filter(sucursal__id=int(request.GET['sucursa'])).exists():
                 data['articulo'],data['buscarid'] = M_Producto.objects.filter(sucursal=3),int(request.GET['sucursa'])
@@ -85,12 +85,20 @@ def articulo(request):
                     return HttpResponse(pdf, content_type='application/pdf')
 
         elif 'action' in request.GET:
-            data['action'] = request.GET['action']
-            if  (request.GET['action'] == 'add') :
-                data['id'] = request.GET['id']
-                data['articulo']= M_Producto.objects.filter(status=True)
-                return JsonResponse(data)
-            return JsonResponse(data)
-            data['marc']=M_Marca.objects.filter(status=True)
 
+            if  (request.GET['action'] == 'elim') :
+                data['action'], data['id'] = request.GET['action'], request.GET['id']
+                producto= M_Producto.objects.get(id=request.GET['id'])
+                producto.status=False
+                producto.save()
+                return redirect('/venta/articulo/')
+
+            if (request.GET['action'] == 'edit'):
+                data['action'], data['id'] = request.GET['action'], request.GET['id']
+
+                return render(request, 'inventario/articulo_modal.html', data)
+                #return JsonResponse(data)
+            #return JsonResponse(data)
+            data['marc']=M_Marca.objects.filter(status=True)
+        data['articulo'] = M_Producto.objects.filter(status=True)
         return  render(request, 'inventario/articulo.html', data)

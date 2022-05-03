@@ -13,11 +13,13 @@
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
-                    <h5 class="mb-0">Prodcutos</h5>
+                    <h5 class="mb-0">Productos</h5>
                     <p class="text-sm mb-0">
                         Listado de productos
                     </p>
                 </div>
+            <div class="card">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-push" id="datatable-search">
                         <thead class="table-info">
@@ -47,7 +49,7 @@
                                 <td class="text-sm font-weight-normal">{{ art.descripcion }}</td>
                                 <td class="text-sm font-weight-normal">{{ art.nombre }}</td>
                                 <td class="text-sm font-weight-normal">${{ art.precio}}</td>
-                                <td class="text-sm font-weight-normal">     {% if art..status %}
+                                <td class="text-sm font-weight-normal">     {% if art.status %}
                                                     <span class="badge  bg-gradient-success">Activo</span>
                                                 {% else %}
                                                     <span class="badge  bg-gradient-danger">Inactivo</span>
@@ -68,6 +70,8 @@
                     </table>
                 </div>
             </div>
+            </div>
+            </div>
         </div>
     </div>    <!-- te ayuda no redireccionar la pagina verbatim -->
     <!--
@@ -79,84 +83,56 @@
     </div>
     {% endverbatim %}-->
 {% endblock %}
-{% block frmodal %}
-    <div class="modal face animated rotateIn" id="mdsucur"  role="dialog">
-    </div>
-{% endblock %}
+
 {% block jscript %}
-
     <script>
-
-    var app= new Vue({
-          el:"#app",
-       data(){
-              articules:[]
-          },
-        methods:{
-          getArticles: function() {
-              this.request('add')
-          },
-          getprimienArticles: function() {
-             // this.request()
-          },
-
-          request:function (q) {
-        const axios = require('axios').default;
-
-          axios.get('articulo/?action='+q)
-          .then(function (response) {
-            // handle success
-            alert((response)
-          })
-          .catch(function (error) {
-            // handle error
-              alert((error);
-          })
-          .then(function () {
-            // always executed
-          });
-
-            }
-        },
-        beforeMount(){
-              this.getArticles()
-        }
-
-    });
+/*swal("¡Bien!", "Has hecho clic en el botón :)", "success");*/
 
 
-   /*var app= new Vue({
-          el:"#app",
-       data(){
-          return{
-              msg:"Hello world!"
-          }}
 
-    });*/
-
-   /*     {% if messages %}
+/*
+swal({
+    title: "Venta realizada",
+    confirmButtonText: "Aceptar",
+});*/
+        $(function () {
+            {% if messages %}
+            {% endif %}
             {% for message in messages %}
-                Swal.fire({
-                    title: 'Información!',
-                    text: '{{ message }}',
-                    html:'{{ message }}',
-                    showCloseButton: true,
-                    confirmButtonColor: "#71C78D",
-                    confirmButtonText: 'OK',
-                    imageWidth: 400,
-                    imageHeight: 200,
-                    imageAlt: 'Custom image',
-                });
+                swal('Información!', '{{ message }}');
             {% endfor %}
-        {% endif %}
+            $('#contenedor').on('click', 'a[rel="action"]', function () {
+                var data = $(this).data('json'),
+                    action = data.action,
+                    id = data.id;
+                if (action == 'elim') {
+                    var desc = $(this).parents('tr').children('td').eq(5).html();
+                    $('#descripcion').html(desc);
+                    $('#frmEliminar #id').val(id);
 
-        function myFunction(url) {
-            $('#mdsucur').load(url,function () {
-                $('#mdsucur').modal({backdrop: 'static', keyboard: false,show:true,remote:false});
+                    swal({
+                      title: "Estas segura/o?",
+                      text: "Una vez eliminado, no podrá recuperar este archivo imaginario!\n Nombre:"+desc,
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                      if (willDelete) {
+
+                        window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+
+                      } else {
+                        swal("Tu archivo está a salvo!");
+                        return
+                      }
+                    });
+
+                }else {
+                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                }
             });
-            return false;
-        }
-
-        $('.chosen-select').chosen();*/
+        });
     </script>
+
 {% endblock %}
