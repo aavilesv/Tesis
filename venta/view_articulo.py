@@ -23,27 +23,31 @@ def articulo(request):
                     if action == 'add':
                         articulo =M_Producto()
 
-                        articulo.marca, articulo.image  = M_Marca.objects.get(pk=int(request.POST['marca'])), request.FILES['image']
-                        articulo.nombre,articulo.descripcion  = request.POST['nombre'],request.POST['descripcion']
-                        articulo.stock,articulo.iva,articulo.precio  = int(request.POST['stock']), float(request.POST['iva']),float(request.POST['precio'])
-                        articulo.descuento,articulo.subtotal= float(request.POST['descuento']),float(request.POST['subtotal'])
-                        if not 'status' in request.POST:
-                            articulo.status =False
+                        articulo.m_marca = M_Marca.objects.get(pk=int(request.POST['m_marca']))
+                        articulo.nombre, articulo.descripcion = request.POST['nombre'], request.POST['descripcion']
+                        articulo.stock, articulo.precio = int(request.POST['stock']), float(request.POST['precio'])
+                        articulo.promocion, articulo.stockmin = float(request.POST['promocion']), (
+                        request.POST['stockmin'])
+                        articulo.stockmax, articulo.m_tipocategoria = int(request.POST['stockmax']), M_TipoCategoria.objects.get(pk=int(request.POST['m_tipocategoria']))
+                        articulo.puntoroden, articulo.m_ubicacion = int(request.POST['puntoroden']), M_Ubicacion.objects.get(pk=int(request.POST['m_ubicacion']))
+
+                        if 'image' in request.FILES:
+                            articulo.image = request.FILES['image']
                         articulo.save()
+
 
                     if action == 'edit':
 
                         articulo = M_Producto.objects.select_related().get(pk=request.POST['id'])
-                        articulo.marca = M_Marca.objects.get(pk=int(request.POST['marca']))
+                        articulo.m_marca = M_Marca.objects.get(pk=int(request.POST['m_marca']))
                         articulo.nombre,articulo.descripcion  = request.POST['nombre'],request.POST['descripcion']
-                        articulo.stock,articulo.iva,articulo.precio  = int(request.POST['stock']), float(request.POST['iva']),float(request.POST['precio'])
-                        articulo.descuento,articulo.subtotal= float(request.POST['descuento']),float(request.POST['subtotal'])
+                        articulo.stock,articulo.precio  = int(request.POST['stock']),float(request.POST['precio'])
+                        articulo.promocion,articulo.stockmin= float(request.POST['promocion']),(request.POST['stockmin'])
+                        articulo.stockmax, articulo.m_tipocategoria = int(request.POST['stockmax']),M_TipoCategoria.objects.get(pk=int(request.POST['m_tipocategoria']))
+                        articulo.puntoroden, articulo.m_ubicacion = int(request.POST['puntoroden']), M_Ubicacion.objects.get(pk=int(request.POST['m_ubicacion']))
                         if 'image' in request.FILES:
                             articulo.image = request.FILES['image']
-                        if not 'status' in request.POST:
-                            articulo.status = False
-                        if 'status' in request.POST:
-                            articulo.status = True
+
                         articulo.save()
 
                     if action == 'elim':
@@ -53,7 +57,7 @@ def articulo(request):
                         articul.save()
             except Exception as ex:
                 messages.error(request, str(ex))
-            return redirect('/inventario/articulo/')
+            return redirect('/venta/articulo/')
     else:
         # Por primera vez viaja por Get
 
@@ -85,7 +89,12 @@ def articulo(request):
                     return HttpResponse(pdf, content_type='application/pdf')
 
         elif 'action' in request.GET:
-
+            data['ubicacion'] = M_Ubicacion.objects.filter(status=True)
+            data['m_tipocategoria'] = M_TipoCategoria.objects.filter(status=True)
+            data['m_marca'] = M_Marca.objects.filter(status=True)
+            if (request.GET['action'] == 'add'):
+                data['action'], data['id'] = request.GET['action'], request.GET['id']
+                return render(request, 'inventario/articulo_modal.html', data)
             if  (request.GET['action'] == 'elim') :
                 data['action'], data['id'] = request.GET['action'], request.GET['id']
                 producto= M_Producto.objects.get(id=request.GET['id'])
@@ -96,9 +105,12 @@ def articulo(request):
             if (request.GET['action'] == 'edit'):
                 data['action'], data['id'] = request.GET['action'], request.GET['id']
 
+
+                data['articulo'] = M_Producto.objects.get(id=request.GET['id'])
                 return render(request, 'inventario/articulo_modal.html', data)
                 #return JsonResponse(data)
             #return JsonResponse(data)
+
             data['marc']=M_Marca.objects.filter(status=True)
         data['articulo'] = M_Producto.objects.filter(status=True)
         return  render(request, 'inventario/articulo.html', data)
