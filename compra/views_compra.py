@@ -29,12 +29,14 @@ def compra(request):
             try:
                 with transaction.atomic():
                     ventajson = json.loads(request.GET['compra'])
-                    proveedor = ventajson['proveedor']
+                    proveedor = ventajson['cliente']
                     total = ventajson['total']
-                    proveedorr= M_PROVEEDOR.objects.get(pk=int(proveedor))
+
                     compra = T_Compra()
-                    compra.cliProentidad = proveedorr
+                    compra.m_proveedor =  M_PROVEEDOR.objects.get(pk=int(proveedor))
+                    compra.subtotal = float(ventajson['subtotal'])
                     compra.total=float(total)
+                    compra.user=request.user
                     compra.fecha= datetime.datetime.now()
                     compra.save()
                     for item in ventajson['items']:
@@ -42,10 +44,10 @@ def compra(request):
                         material =M_Producto.objects.get(pk=artid)
 
                         detalle = T_Compradetalle()
-                        detalle.salidacompra=compra
-                        detalle.material=material
+                        detalle.t_compra=compra
+                        detalle.m_producto=material
                         detalle.cantidad=int(item['cantidad'])
-                        detalle.valor=float(item['precio'])
+                        detalle.total=float(item['precio'])
                         detalle.save()
                         material.stock += int(item['cantidad'])
                         material.save()
@@ -60,10 +62,15 @@ def compra(request):
             data['material'] = M_Producto.objects.filter(status=True)
             data['fecha'] = datetime.date.today()
             return render(request, 'compra/compra_form.html', data)
+        if action == 'elim':
+            compra = T_Compra.objects.get(pk=request.GET['id'])
+            compra.status=False
+            compra.save()
+            return redirect('/compra/compra/')
 
         if action == 'ver':
             id = request.GET['id']
-            data['compraa'] = T_Compra.objects.get(pk=id)
+            data['compraa'] = T_Compra.objects.get(pk=request.GET['criterio'])
             data['detallee'] = T_Compradetalle.objects.filter(t_compra=data['compraa'])
             return render(request, 'compra/detalle_listado.html', data)
     else:

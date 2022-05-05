@@ -12,9 +12,9 @@
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
-                    <h5 class="mb-0">Datatable Search</h5>
+                    <h5 class="mb-0">Compras</h5>
                     <p class="text-sm mb-0">
-                        A lightweight, extendable, dependency-free javascript HTML table plugin.
+                        Listado de Compras.
                     </p>
                 </div>
                 <div class="table-responsive">
@@ -24,9 +24,9 @@
                             <th>Código</th>
                             <th>Proveedor</th>
                             <th>Fecha de Compra</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Acción</th>
+                            <th>Subtotal</th>
+                            <th>Total</th>
+                            <th>Usuario creador</th>
                             <th>Acción</th>
                         </tr>
                         </thead>
@@ -35,15 +35,17 @@
                             <tr>
                                 <td class="text-sm font-weight-normal">{{ compra.id }}</td>
                                 <td class="text-sm font-weight-normal">{{ compra.m_proveedor.nombre }}</td>
-                                <td class="text-sm font-weight-normal">Edinburgh</td>
-                                <td class="text-sm font-weight-normal">61</td>
-                                <td class="text-sm font-weight-normal">2011/04/25</td>
-                                <td class="text-sm font-weight-normal">$320,800</td>
+                                <td class="text-sm font-weight-normal">{{ compra.fecha }}</td>
+                                <td class="text-sm font-weight-normal">${{ compra.subtotal }}</td>
+                                <td class="text-sm font-weight-normal">${{ compra.total }}</td>
+                                <td class="text-sm font-weight-normal">{{ compra.user.first_name }} {{ compra.user.last_name }}</td>
                                 <td class="text-sm font-weight-normal">
                                     <br>
                                     <ul class="d-md-inline-flex list-inline">
-                                        <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ compra.id }}"}'><i class="fa fa-edit"></i> Editar</a></li>
-                                        <li><a class="btn bg-gradient-danger" href="#modal" data-bs-toggle="modal" data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ compra.id }}"}'><i class="fa fa-trash-o"></i> Eliminar</a></li>
+                                       <!-- <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ compra.id }}"}'><i class="fa fa-edit"></i> Editar</a></li>-->
+                                        <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
+                                               data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ compra.id }}"}'>
+                                            <i class="fa fa-ban"></i> Anular</a></li>
                                     </ul></td>
                             </tr>
                         {% empty %}
@@ -59,36 +61,6 @@
     </div>
 
 {% endblock %}
-{% block frmodal %}
-    <!-- inicio formulario Modal para Eliminar -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form name="frmEliminar" id="frmEliminar" method="POST" action="{{ ruta }}">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-    <input type="hidden" name="id" id="id" value="">
-                        <input type="hidden" name="action" value="elim">
-                        <label>Cliente:</label>
-                        <span id="descripcion"></span><br>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn bg-gradient-primary">Save changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Final Formulario Modal-->
-{% endblock %}
 {% block jscript %}
     <script>
 
@@ -103,13 +75,28 @@
                     action = data.action,
                     id = data.id;
                 if (action == 'elim') {
-                    var desc = $(this).parents('tr').children('td').eq(0).html();
+                    var desc = $(this).parents('tr').children('td').eq(1).html();
                     $('#descripcion').html(desc);
                     $('#frmEliminar #id').val(id);
-                    $('#myModal').modal({backdrop: 'static', keyboard: false,show:true,remote:false});
-                    return
-                }
+                    swal({
+                      title: "Estas segura/o?",
+                      text: "Una vez eliminado, no podrá recuperar este archivo imaginario!\n Nombre:"+desc,
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                      if (willDelete) {
+                       window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                      } else {
+                        swal("Tu archivo está a salvo!");
+                        return
+                      }
+                    });
+                 } else {
                 window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                }
+
             });
         });
     </script>
