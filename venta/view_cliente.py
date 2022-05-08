@@ -31,14 +31,14 @@ def cliente(request):
 
                         clien = M_CLIENTE()
                         clien.direccion,clien.email,clien.nombre = request.POST['direccion'],request.POST['email'], request.POST['nombre']
-                        clien.ced_ruc, clien.telefono = request.POST['ced_ruc'],request.POST['telefono']
+                        clien.ced_ruc, clien.telefono, clien.sitioweb = request.POST['ced_ruc'], request.POST['telefono'], request.POST['sitioweb']
                         clien.save()
 
                     if action == 'edit':
 
                         clien = M_CLIENTE.objects.get(pk=int(request.POST['id']))
                         clien.direccion, clien.email, clien.nombre = request.POST['direccion'], request.POST['email'],request.POST['nombre']
-                        clien.ced_ruc, clien.telefono = request.POST['ced_ruc'], request.POST['telefono']
+
                         clien.save()
 
 
@@ -53,11 +53,20 @@ def cliente(request):
     else:
         # Por primera vez viaja por Get
         if 'action' in request.GET:
-            data['action'] = request.GET['action']
-            if not request.GET['action'] == 'add':
-                data['id'],data['client']  = request.GET['id'],M_CLIENTE.objects.get(pk=int(request.GET['id']))
-            return render(request, 'venta/cliente_modal.html', data)
-        elif 'imprime' in request.GET:
+
+            if  request.GET['action'] == 'add':
+                data['action'] = request.GET['action']
+                data['id'] = request.GET['id']
+
+                return render(request, 'venta/cliente_modal.html', data)
+
+            if request.GET['action'] == 'elim':
+                clien = M_CLIENTE.objects.get(pk=int(request.GET['id']))
+                clien.status = False
+                clien.save()
+                return redirect('/venta/cliente/')
+
+                '''elif 'imprime' in request.GET:
 
             cliente = {
 
@@ -65,7 +74,11 @@ def cliente(request):
                 'model': 'Cliente'
             }
             pdf = render_to_pdf('venta/pdfcliente.html', cliente)
-            return HttpResponse(pdf, content_type='application/pdf')
+            return HttpResponse(pdf, content_type='application/pdf')'''
+            elif (request.GET['action'] == 'edit'):
+                data['action'], data['id'] = request.GET['action'], request.GET['id']
+                data['client'] = M_CLIENTE.objects.get(id=request.GET['id'])
+                return render(request, 'venta/cliente_modal.html', data)
         else:
             # Viaja por get
             data['cliente'] = M_CLIENTE.objects.filter(status=True)
