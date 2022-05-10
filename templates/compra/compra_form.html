@@ -14,7 +14,7 @@
                                         <option value="" selected disabled hidden>Seleccione una Cédula o Nombre</option>
                                         {% for p in proveedores %}
                                             <option value="{{ p.id }}"
-                                                    data-cjson='{"ruc":"{{ p.ced_ruc }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
+                                                    data-cjson='{"ruc":"{{ p.nombre }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
                                                     {{ 'selected' }} >{{ p.ced_ruc }} : {{ p.nombre }}</option>
                                         {% endfor %}
                                     </select>
@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-md-2" for="cedulaas">Cédula:</label>
+                                    <label class="control-label col-md-2" for="cedulaas">Identifiación:</label>
                                     <div class="col-md-10">
                                         <input id="cedulaas" disabled style="background-color: white;" class="form-control" type="text"
                                                placeholder="Cédula"/>
@@ -375,7 +375,7 @@
 
                                 swal({
                       title: "Estas segura/o?",
-                      text: "Registrar Factura!",
+                      text: "Registrar Compra!",
                       icon: "warning",
                       buttons: true,
                       dangerMode: true,
@@ -396,11 +396,7 @@
                                         if (data.resp == true) {
 
 
-                                            swal("Registrar!","Compra realizada", "success"), function () {
-
-                                            };
-
-
+                                            swal("Registrar!","Compra realizada", "success")
 
                                             window.location.reload();
                                         } else {

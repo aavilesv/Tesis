@@ -20,58 +20,26 @@ def venta(request):
         'user': request.user.username,
     }
     addUserData(request, data)
-    if request.method == 'POST':
-        if 'action' in request.POST:
-            action = request.POST['action']
-            try:
-                with transaction.atomic():
-
-                    if action == 'elim':
-                        venta = T_Factura.objects.get(pk=int(request.POST['id']))
-                        venta.status = False
-                        venta.usermodificardor, venta.userfechamodificador= int(request.user.id),datetime.datetime.now()
-
-                        venta.save()
-
-
-                        for item in T_Facturadetalle.objects.filter(venta=venta):
-
-                            print(item.articulo.id)
-                            if M_Producto.objects.filter(sucursal=M_CLIENTE.objects.get(pk=1)).exists():
-                                print('entrar')
-                                arct=(M_Producto.objects.get(pk=int(item.articulo.id)))
-#                                arct= Articulo.objects.get(Q(sucursal=Sucursal.objects.filter(pk=e.sucursal.id)) & Q(pk=int(item.articulo.id)))
-                                arct.stock += int(item.cantidad)
-                                arct.save()
-
-
-            except Exception as ex:
-                messages.error(request, str(ex))
-            return redirect('/venta/venta/')
-    # Por primera vez viaja por Get
-    elif 'action' in request.GET:
+    if 'action' in request.GET:
         action = request.GET['action']
         data['action'] = action
         if action == 'cargaventa':
             try:
                 with transaction.atomic():
                     ventajson = json.loads(request.GET['venta'])
+
                     vent = T_Factura()
-                    vent.cliente,vent.iva = M_CLIENTE.objects.get(pk=int(ventajson['cliente'])),round(float(ventajson['subtotal']) * 0.12)
+                    vent.m_cliente = M_CLIENTE.objects.get(pk=int(ventajson['cliente']))
                     vent.subtotal ,vent.total  = round(float(ventajson['subtotal'])), round(float(ventajson['total']))
-                    vent.fechaventa,vent.descuento = datetime.datetime.now(),0
+                    vent.fecha,vent.descuento = datetime.datetime.now(),0
                     vent.user = (request.user)
-                    vent.userfecha=datetime.datetime.now()
-                    e=T_Factura.objects.get(user=request.user)
-                    vent.sucursal = T_Factura.objects.get(pk=e.sucursal.id)
-                    vent.usermodificardor,vent.userfechamodificador,vent.empresa = 0,datetime.datetime.now(), M_CLIENTE.objects.get(pk=1)
                     vent.save()
 
                     for item in ventajson['items']:
 
                         if M_Producto.objects.filter(id=int(item['id'])).exists():
-                            detalle = T_Factura()
-                            detalle.venta,detalle.articulo = vent, M_Producto.objects.get(pk=int(item['id']))
+                            detalle = T_Facturadetalle()
+                            detalle.t_factura,detalle.m_producto = vent, M_Producto.objects.get(pk=int(item['id']))
                             detalle.cantidad,detalle.total  =int(item['cantidad']), float(item['precio'])
                             arct = M_Producto.objects.get(pk=int(item['id']))
                             arct.stock -= int(item['cantidad'])
@@ -114,6 +82,11 @@ def venta(request):
             venta = T_Factura.objects.get(pk=request.GET['id'])
             venta.status = False
             venta.save()
+            venta = T_Factura.objects.get(pk=int(request.POST['id']))
+            for item in T_Facturadetalle.objects.filter(venta=venta):
+                arct = (M_Producto.objects.get(pk=int(item.m_producto.id)))
+                arct.stock += int(item.cantidad)
+                arct.save()
             return redirect('/venta/venta/')
 
     elif 'imprimeunidad' in request.GET:
