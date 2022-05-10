@@ -82,8 +82,6 @@ class T_Factura(models.Model):
     m_cliente = models.ForeignKey(M_CLIENTE,on_delete=models.PROTECT)
     status = models.BooleanField(default=True)
 
-    def __str__(self):
-        return '{}-{}'.format(self.nombre, self.descripcion)
     class Meta:
         verbose_name = 'T_Factura'
         verbose_name_plural = 'T_Factura'

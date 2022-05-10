@@ -98,16 +98,23 @@ def venta(request):
                 return HttpResponse(json.dumps({"resp": False, "mensaje": str(ex)}),
                                     content_type="application/json")
         if action == 'add':
-            data['cliente'],data['articul'] = M_CLIENTE.objects.filter(status=True),M_Producto.objects.filter(precio__gte=1,elim=True)
+
+            data['cliente'] = M_CLIENTE.objects.filter(status=True)
+            data['articul'] = M_Producto.objects.filter(status=True)
+            data['fecha'] = datetime.date.today()
             return render(request, 'venta/venta_form.html', data)
 
-        if action == 'ver':
-            id = request.GET['id']
-            v=T_Factura.objects.get(pk=id)
-            data['venta'],data['detalle'] =v,T_Facturadetalle.objects.filter(venta=T_Factura.objects.get(pk=id)).order_by('articulo_id')
+            if action == 'ver':
+                id = request.GET['id']
+                v=T_Factura.objects.get(pk=id)
+                data['venta'],data['detalle'] =v,T_Facturadetalle.objects.filter(venta=T_Factura.objects.get(pk=id)).order_by('articulo_id')
 
-            return render(request, 'venta/venta_visualizar.html', data)
-
+                return render(request, 'venta/venta_visualizar.html', data)
+        if action == 'elim':
+            venta = T_Factura.objects.get(pk=request.GET['id'])
+            venta.status = False
+            venta.save()
+            return redirect('/venta/venta/')
 
     elif 'imprimeunidad' in request.GET:
         id = request.GET['id']
@@ -135,5 +142,5 @@ def venta(request):
         return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get
-        data['venta'] =  T_Factura.objects.all().order_by('id')
+        data['venta'] =  T_Factura.objects.filter(status=True).order_by('id')
         return render(request, 'venta/Venta.html', data)

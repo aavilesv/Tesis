@@ -33,7 +33,7 @@
                         {% for mar in marca %}
                             <tr>
                                 <td class="text-sm font-weight-normal">{{ mar.nombre }}</td>
-                                <td class="text-sm font-weight-normal">     {% if art.status %}
+                                <td class="text-sm font-weight-normal">     {% if mar.status %}
                                                     <span class="badge  bg-gradient-success">Activo</span>
                                                 {% else %}
                                                     <span class="badge  bg-gradient-danger">Inactivo</span>
@@ -41,7 +41,7 @@
                                 <td class="text-sm font-weight-normal">
                                     <br>
                                     <ul class="d-md-inline-flex list-inline">
-                                        <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ mar.id }}"}'><i class="fa fa-edit"></i> Editar</a></li>
+                                        <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ mar.id }}"}'><i class="fa fa-edit"></i> Editar</a></li> &nbsp;
                                         <li><a class="btn bg-gradient-danger" href="#modal" data-bs-toggle="modal" data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ mar.id }}"}'><i class="fa fa-trash-o"></i> Eliminar</a></li>
                                     </ul></td>
                             </tr>
@@ -62,46 +62,45 @@
     <div class="modal face animated rotateIn" id="mdsucur"  role="dialog">
     </div>
 {% endblock %}
-{% block jscript %}
-    <script>
-        {% if messages %}
+{% block jscript %}      <script>
+    $(function () {
+            {% if messages %}
+            {% endif %}
             {% for message in messages %}
-                Swal.fire({
-                    title: 'Información!',
-                    text: '{{ message }}',
-                    html:'{{ message }}',
-                    showCloseButton: true,
-                    confirmButtonColor: "#71C78D",
-                    confirmButtonText: 'OK',
-                    imageWidth: 400,
-                    imageHeight: 200,
-                    imageAlt: 'Custom image',
-                });
+                swal('Información!', '{{ message }}');
             {% endfor %}
-        {% endif %}
-        $("#btnPdf").click(function() {
-            alert("Handler for .click() called.");
-            $.ajax({
-                type:"GET",
-                url: '{{ ruta }}',
-                data: {
-                    'action':'imprimir'
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.resp == true) {
-                        window.location.reload();
-                    } else {
-                        alert('holasdsd');
-                    }
+            $('#contenedor').on('click', 'a[rel="action"]', function () {
+                var data = $(this).data('json'),
+                    action = data.action,
+                    id = data.id;
+                if (action == 'elim') {
+                    var desc = $(this).parents('tr').children('td').eq(0).html();
+                    $('#descripcion').html(desc);
+                    $('#frmEliminar #id').val(id);
+
+                    swal({
+                      title: "Estas segura/o?",
+                      text: "Una vez eliminado, no podrá recuperar este archivo!\n Nombre:"+desc,
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                      if (willDelete) {
+
+                        window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+
+                      } else {
+                        swal("Tu archivo está a salvo!");
+                        return
+                      }
+                    });
+
+                }else {
+                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
                 }
             });
         });
-        function myFunction(url) {
-            $('#mdsucur').load(url,function () {
-                $('#mdsucur').modal({backdrop: 'static', keyboard: false,show:true,remote:false});
-            });
-            return false;
-        }
     </script>
+
 {% endblock %}

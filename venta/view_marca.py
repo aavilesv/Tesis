@@ -23,8 +23,7 @@ def marca(request):
                 with transaction.atomic():
                     if action == 'add':
                         marca = M_Marca()
-                        marca.nombre,marca.descripcion = request.POST['nombre'],request.POST['descripcion']
-
+                        marca.nombre = request.POST['nombre']
                         staa = True
                         if not 'status' in request.POST:
                             staa = False
@@ -32,29 +31,35 @@ def marca(request):
                         marca.save()
                     if action == 'edit':
                         marca = M_Marca.objects.select_related().get(pk=request.POST['id'])
-                        marca.nombre,marca.descripcion  = request.POST['nombre'],request.POST['descripcion']
+                        marca.nombre= request.POST['nombre']
                         staa = True
                         if not 'status' in request.POST:
                             staa = False
                         marca.status = staa
                         marca.save()
-                    if action == 'elim':
-                        id = request.POST['id']
-                        marca=M_Marca.objects.get(pk=int(id))
-                        marca.elim=False
-                        marca.save()
+
             except Exception as ex:
                 messages.error(request, 'Error, dato ya registrado')
-            return redirect('/inventario/marca/')
+            return redirect('/venta/marca/')
     else:
         # Por primera vez viaja por Get
         if 'action' in request.GET:
             action = request.GET['action']
             data['action'] = action
-            if action == 'edit' or action == 'elim':
+            if action == 'edit':
                 data['id'] = request.GET['id']
                 data['marca']=M_Marca.objects.get(pk=int(request.GET['id']))
-            return render(request, 'inventario/marca_modal.html', data)
+                return render(request, 'inventario/marca_modal.html', data)
+            if action == 'add':
+                data['id'] = request.GET['id']
+
+                return render(request, 'inventario/marca_modal.html', data)
+            if action == 'elim':
+                id = request.GET['id']
+                marca = M_Marca.objects.get(pk=int(id))
+                marca.elim = False
+                marca.save()
+                return redirect('/venta/marca/')
         elif 'imprime' in request.GET:
 
             marca = {
@@ -68,5 +73,5 @@ def marca(request):
 
         else:
             # Viaja por get
-            data['marca']=M_Marca.objects.filter(status=True)
+            data['marca']=M_Marca.objects.all()
             return render(request, 'inventario/marca.html', data)
