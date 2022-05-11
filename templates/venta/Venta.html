@@ -2,13 +2,13 @@
 {% block contenid %}
     <div class="row mt-4">
         <div class="col-12">
-           <div class="col-lg-6">
-                    <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
-                       class="btn btn-success sbox">
-                        <i class="fa fa-plus"></i>
-                        Nuevo Registro
-                    </a>
-                </div>
+            <div class="col-lg-6">
+                <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
+                   class="btn btn-success sbox">
+                    <i class="fa fa-plus"></i>
+                    Nuevo Registro
+                </a>
+            </div>
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
@@ -42,7 +42,13 @@
                                 <td class="text-sm font-weight-normal">
                                     <br>
                                     <ul class="d-md-inline-flex list-inline">
-                                       <!-- <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ compra.id }}"}'><i class="fa fa-edit"></i> Editar</a></li>-->
+                                        <!-- <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ compra.id }}"}'><i class="fa fa-edit"></i> Editar</a></li>-->
+
+                                        <li>
+                                            <a href="{{ ruta }}?imprimeunidad=imprimir&id={{ compra.id }}" class="btn  btn-outline-info" data-original-title="Imprimir"  target="_blank">
+                                                <i class="fa fa-print"> Imprimir</i>
+                                            </a>
+                                        </li> &nbsp;
                                         <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
                                                data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ compra.id }}"}'>
                                             <i class="fa fa-ban"></i> Anular</a></li>
@@ -79,22 +85,22 @@
                     $('#descripcion').html(desc);
                     $('#frmEliminar #id').val(id);
                     swal({
-                      title: "Estas segura/o?",
-                      text: "Una vez eliminado, no podrá recuperar este archivo !\n Nombre:"+desc,
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true,
+                        title: "Estas segura/o?",
+                        text: "Una vez eliminado, no podrá recuperar este archivo !\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
                     })
-                    .then((willDelete) => {
-                      if (willDelete) {
-                       window.location = '{{ ruta }}?action=' + action + '&id=' + id;
-                      } else {
-                        swal("Tu archivo está a salvo!");
-                        return
-                      }
-                    });
-                 } else {
-                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                            } else {
+                                swal("Tu archivo está a salvo!");
+                                return
+                            }
+                        });
+                } else {
+                    window.location = '{{ ruta }}?action=' + action + '&id=' + id;
                 }
 
             });

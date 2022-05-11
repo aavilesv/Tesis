@@ -14,7 +14,7 @@ def proveedor(request):
     data ={
         'titulo':'Consulta de proveedores -FULL AUTO MILAGRO',
         'model': 'Proveedor',
-        'ruta':'/compra/proveedor/',
+        'ruta':'/compra/proveedores/',
         'user': request.user.username,
     }
     addUserData(request, data)

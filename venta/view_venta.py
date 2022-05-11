@@ -93,11 +93,10 @@ def venta(request):
         id = request.GET['id']
         v=T_Factura.objects.get(pk=int(id))
         t = "0"
-        for i in range(9-len(str(v.id))):
-            t+="0"
+
         factura = {
 
-            'venta': T_Facturadetalle.objects.filter(venta=T_Factura.objects.get(pk=id)).order_by('articulo_id'),
+            'venta': T_Facturadetalle.objects.filter(t_factura=T_Factura.objects.get(pk=id)).order_by('m_producto_id'),
             'facturaa':v,
             'model': 'Factura: '+t+str(v.id)
         }
