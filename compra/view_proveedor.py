@@ -35,6 +35,7 @@ def proveedor(request):
                         proveedo.nombre = request.POST['nombre']
                         proveedo.ced_ruc = request.POST['ced_ruc']
                         proveedo.telefono = request.POST['telefono']
+                        proveedo.sitioweb = request.POST['sitioweb']
                         proveedo.save()
 
                     if action == 'edit':
@@ -45,39 +46,43 @@ def proveedor(request):
                         proveedo.nombre = request.POST['nombre']
                         proveedo.ced_ruc = request.POST['ced_ruc']
                         proveedo.telefono = request.POST['telefono']
-                        proveedo.save()
+                        proveedo.sitioweb= request.POST['sitioweb']
 
 
-                    if action == 'elim':
-                        proveedo = M_PROVEEDOR.objects.get(pk=int(request.POST['id']))
-                        proveedo.status = False
                         proveedo.save()
+
 
             except Exception as ex:
                 messages.error(request, str(ex))
-            return redirect('/compra/proveedor/')
+            return redirect('/compra/proveedores/')
     else:
-        # Por primera vez viaja por Get
         if 'action' in request.GET:
-            action = request.GET['action']
-            data['action'] = action
-            if action == 'edit' or action == 'elim' or action == 'ver':
-                id = request.GET['id']
-                data['id'] = id
-                proveedor = M_PROVEEDOR.objects.get(pk=id)
-                data['proveedo'] = proveedor
 
+            if request.GET['action'] == 'add':
+                data['action'] = request.GET['action']
+                data['id'] = request.GET['id']
 
-            return render(request, 'compra/proveedor_modal.html', data)
-        elif 'imprime' in request.GET:
+                return render(request, 'compra/proveedor_modal.html', data)
 
-            proveedor = {
+            if request.GET['action'] == 'elim':
+                clien = M_PROVEEDOR.objects.get(pk=int(request.GET['id']))
+                clien.status = False
+                clien.save()
+                return redirect('/compra/proveedores/')
 
-                'proveedor':M_PROVEEDOR.objects.filter(status=True)#, 'empresa': Empresa.objects.first(),'model':'Proveedor'
+                '''elif 'imprime' in request.GET:
+
+            cliente = {
+
+                'cliente': M_CLIENTE.objects.filter(status=True).exclude(nombre__icontains='Consumidor Final'), 'empresa': Empresa.objects.first(),
+                'model': 'Cliente'
             }
-            pdf = render_to_pdf('compra/pdfproveedor.html', proveedor)
-            return HttpResponse(pdf, content_type='application/pdf')
-
+            pdf = render_to_pdf('venta/pdfcliente.html', cliente)
+            return HttpResponse(pdf, content_type='application/pdf')'''
+            elif (request.GET['action'] == 'edit'):
+                data['action'], data['id'] = request.GET['action'], request.GET['id']
+                data['proveedor'] = M_PROVEEDOR.objects.get(id=request.GET['id'])
+                return render(request, 'compra/proveedor_modal.html', data)
 
         else:
             # Viaja por get

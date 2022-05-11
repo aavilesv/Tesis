@@ -37,8 +37,8 @@ def cliente(request):
                     if action == 'edit':
 
                         clien = M_CLIENTE.objects.get(pk=int(request.POST['id']))
-                        clien.direccion, clien.email, clien.nombre = request.POST['direccion'], request.POST['email'],request.POST['nombre']
-
+                        clien.direccion, clien.email, clien.nombre, clien.sitioweb  = request.POST['direccion'], request.POST['email'],request.POST['nombre'], request.POST['sitioweb']
+                        clien.telefono=request.POST['telefono']
                         clien.save()
 
 

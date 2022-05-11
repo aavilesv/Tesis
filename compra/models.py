@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from venta.models import M_Producto
 from django.utils import timezone
+
+
 class M_PROVEEDOR(models.Model):
     nombre = models.CharField(max_length=200, verbose_name="EMPRESA",default='')
     direccion = models.CharField(max_length=200,verbose_name="DIRECCION",default='')
