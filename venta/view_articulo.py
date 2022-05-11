@@ -69,24 +69,13 @@ def articulo(request):
                 messages.info(request, 'No se hay articulos en esta sucursal')
 
         elif 'imprime' in request.GET:
-            if 'buscarid' in request.GET:
-                if M_Producto.objects.filter(sucursal__id=int(request.GET['buscarid'])).exists():
-                    articulos = M_Producto.objects.filter(sucursal=3,elim=True)
-                    articulo = {
+            articulos = M_Producto.objects.filter(status=True)
+            articulo = {
 
-                        'articulo': articulos
-                    }
-                    pdf = render_to_pdf('inventario/pdfarticulo.html', articulo)
-                    return HttpResponse(pdf, content_type='application/pdf')
-                elif int(request.GET['buscarid']) == 0:
-                    articulos = M_Producto.objects.filter(elim=True)
-
-                    articulo = {
-
-                        'articulo': articulos
-                    }
-                    pdf = render_to_pdf('inventario/pdfarticulo.html', articulo)
-                    return HttpResponse(pdf, content_type='application/pdf')
+                'articulo': articulos
+            }
+            pdf = render_to_pdf('inventario/pdfarticulo.html', articulo)
+            return HttpResponse(pdf, content_type='application/pdf')
 
         elif 'action' in request.GET:
             data['ubicacion'] = M_Ubicacion.objects.filter(status=True)

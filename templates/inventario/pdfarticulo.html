@@ -73,11 +73,6 @@
     </div>
 </div>
 
-<img src="../media/{{ empresa.image }}" class="img-circle grande imagess" alt="User Image">
-
-<div class="estil" style="font-family:'Times New Roman'; font-size: 14px;">{{ empresa.nombre }} <br>Telefono:{{ empresa.celular }} <br>Email:{{ empresa.email }}
-    <br>
-</div>
 <div id="content_frame">
     <div class="panel-body">
         <div class="panel panel-info">
@@ -90,9 +85,6 @@
                                             <i class="fa fa-image" aria-hidden="true"> Foto</i>
                                         </th>
 
-                                        <th>
-                                            <i class="fa fa-building" aria-hidden="true"> Sucursal</i>
-                                        </th>
 
                                         <th>
                                             <i class="fa fa-square" aria-hidden="true"> Nombre</i>
@@ -120,8 +112,6 @@
                     <tr class="p-0 m-0">
                         <td class="p-2 m-0">
                             <img src="../media/{{ articu.image }}" class="img-circle grande" alt="User Image"></td>
-                        <td class="p-2 m-0">{{ articu.sucursal.razonsocial }}</td>
-
                         <td style="width: auto;">{{ articu.nombre }} {{ articu.marca.nombre }} </td>
                         <td class="p-2 m-0">{{ articu.descripcion }}</td>
                         <td width="50">&#36;{{ articu.descuento }}</td>
