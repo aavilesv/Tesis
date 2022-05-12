@@ -82,8 +82,7 @@ def venta(request):
             venta = T_Factura.objects.get(pk=request.GET['id'])
             venta.status = False
             venta.save()
-            venta = T_Factura.objects.get(pk=int(request.POST['id']))
-            for item in T_Facturadetalle.objects.filter(venta=venta):
+            for item in T_Facturadetalle.objects.filter(t_factura=venta):
                 arct = (M_Producto.objects.get(pk=int(item.m_producto.id)))
                 arct.stock += int(item.cantidad)
                 arct.save()

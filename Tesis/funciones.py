@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.utils.timezone import now
-
+from io import BytesIO
 import os
 from django.conf import settings
 from django.http import HttpResponse
@@ -11,7 +11,7 @@ from django.contrib.staticfiles import finders
 from Tesis.config import LOGO_SISTEMA, NOMBRE_SISTEMA, NOMBRE_AUTOR, NOMBRE_INSTITUCION
 from Seguridad.models import ModuloGrupo
 '''
-def render_to_pdfd(template_src, context_dict={}):
+def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
     html  = template.render(context_dict)
     result = BytesIO()
@@ -19,8 +19,8 @@ def render_to_pdfd(template_src, context_dict={}):
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
-'''
 
+'''
 def render_to_pdf(template_src, context_dict={}):
     template_path = template_src
     # Create a Django response object, and specify content_type as pdf
@@ -30,9 +30,10 @@ def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_path)
     html = template.render(context_dict)
 
+
     # create a pdf
     pisa_status = pisa.CreatePDF(
-       html, dest=response)
+       html.encode('UTF-8'), dest=response, encoding='UTF-8')
     # if error then show some funny view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
