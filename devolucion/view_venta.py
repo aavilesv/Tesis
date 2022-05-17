@@ -16,7 +16,7 @@ def venta(request):
     data ={
         'titulo':'Consulta de ventas -FULL AUTO MILAGRO',
         'model': 'Venta',
-        'ruta':'/venta/venta/',
+        'ruta':'/devolucionventas/venta/',
         'user': request.user.username,
     }
     addUserData(request, data)
@@ -70,7 +70,7 @@ def venta(request):
             data['cliente'] = M_CLIENTE.objects.filter(status=True)
             data['articul'] = M_Producto.objects.filter(status=True)
             data['fecha'] = datetime.date.today()
-            return render(request, 'venta/venta_form.html', data)
+            return render(request, 'devolucionventas/venta_form.html', data)
 
             if action == 'ver':
                 id = request.GET['id']
@@ -86,7 +86,7 @@ def venta(request):
                 arct = (M_Producto.objects.get(pk=int(item.m_producto.id)))
                 arct.stock += int(item.cantidad)
                 arct.save()
-            return redirect('/venta/venta/')
+            return redirect('/devolucionventas/venta/')
 
     elif 'imprimeunidad' in request.GET:
         id = request.GET['id']
@@ -99,7 +99,7 @@ def venta(request):
             'facturaa':v,
             'model': 'Factura: '+t+str(v.id)
         }
-        pdf = render_to_pdf('venta/pdffacturaunidad.html', factura)
+        pdf = render_to_pdf('devolucionventas/pdffacturaunidad.html', factura)
         return HttpResponse(pdf, content_type='application/pdf')
 
     elif 'imprime' in request.GET:
@@ -109,9 +109,9 @@ def venta(request):
             'venta': T_Factura.objects.all(),
             'model': 'Factura'
         }
-        pdf = render_to_pdf('venta/pdfventa.html', cliente)
+        pdf = render_to_pdf('devolucionventas/pdfventa.html', cliente)
         return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get
         data['venta'] =  T_Factura.objects.filter(status=True).order_by('id')
-        return render(request, 'venta/Venta.html', data)
+        return render(request, 'devolucionventas/Venta.html', data)

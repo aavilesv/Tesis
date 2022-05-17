@@ -14,7 +14,7 @@ def compra(request):
     data = {
         'titulo': 'CONSULTA DE COMPPRA',
         'model': 'COMPRA',
-        'ruta': '/compra/compra/',
+        'ruta': '/devolucioncompras/compra/',
         'user': request.user.username,
     }
     addUserData(request, data)
@@ -61,18 +61,18 @@ def compra(request):
             data['proveedores'] = M_PROVEEDOR.objects.filter(status=True)
             data['material'] = M_Producto.objects.filter(status=True)
             data['fecha'] = datetime.date.today()
-            return render(request, 'compra/compra_form.html', data)
+            return render(request, 'devolucioncompras/compra_form.html', data)
         if action == 'elim':
             compra = T_Compra.objects.get(pk=request.GET['id'])
             compra.status=False
             compra.save()
-            return redirect('/compra/compra/')
+            return redirect('/devolucioncompras/compra/')
 
         if action == 'ver':
             id = request.GET['id']
             data['compraa'] = T_Compra.objects.get(pk=request.GET['criterio'])
             data['detallee'] = T_Compradetalle.objects.filter(t_compra=data['compraa'])
-            return render(request, 'compra/detalle_listado.html', data)
+            return render(request, 'devolucioncompras/detalle_listado.html', data)
     else:
         # Viaja por get cuando hay busqueda con criterio
         criterio = None
@@ -118,7 +118,7 @@ def compra(request):
         data['rangospaging'] = paging.rangos_paginado(p)
         data['page'] = page
         data['compras'] = page.object_list
-        return render(request, 'compra/compra_listado.html', data)
+        return render(request, 'devolucioncompras/compra_listado.html', data)
 
 def month_string_to_number(string):
     m = { "Ener": 1,"Febr": 2,"Marz": 3,"Abri":4,"Mayo":5,"Juni":6,"Juli":7,"Agos":8,"Sept":9,"Octu":10,"Novi":11,"Dici":12}
