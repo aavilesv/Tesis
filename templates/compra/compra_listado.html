@@ -2,13 +2,13 @@
 {% block contenid %}
     <div class="row mt-4">
         <div class="col-12">
-           <div class="col-lg-6">
-                    <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
-                       class="btn btn-success sbox">
-                        <i class="fa fa-plus"></i>
-                        Nuevo Registro
-                    </a>
-                </div>
+            <div class="col-lg-6">
+                <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
+                   class="btn btn-success sbox">
+                    <i class="fa fa-plus"></i>
+                    Nuevo Registro
+                </a>
+            </div>
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
@@ -18,7 +18,7 @@
                     </p>
                 </div>
                 <div class="table-responsive">
-                      <table id="datatable-search" class="table table-striped"  style="width:100%">
+                    <table id="datatable-search" class="table table-striped"  style="width:100%">
                         <thead class="badge-dark">
                         <tr>
                             <th>Código</th>
@@ -42,11 +42,21 @@
                                 <td class="text-sm font-weight-normal">
                                     <br>
                                     <ul class="d-md-inline-flex list-inline">
-                                       <!-- <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ compra.id }}"}'><i class="fa fa-edit"></i> Editar</a></li>-->
+
+                                        <li>
+                                            <a href="{{ ruta }}?imprimeunidad=imprimir&id={{ compra.id }}" class="btn  btn-outline-info" data-original-title="Imprimir"  target="_blank">
+                                                <i class="fa fa-print"> Imprimir</i>
+                                            </a>
+                                        </li> &nbsp;
                                         <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
                                                data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ compra.id }}"}'>
-                                            <i class="fa fa-ban"></i> Anular</a></li>
-                                    </ul></td>
+                                            <i class="fa fa-ban"></i> Anular</a></li>&nbsp;
+                                        <li><a class="btn btn-info" data-bs-toggle="modal" href="#modal"
+                                               rel="action" data-json='{"action":"devoluci","id":"{{ compra.id }}"}'>
+                                            <i class="fa fa-undo"></i> Devolución
+                                        </a></li>
+                                    </ul>
+                                </td>
                             </tr>
                         {% empty %}
                             <tr>
@@ -60,6 +70,35 @@
         </div>
     </div>
 
+{% endblock %}
+{% block frmodal %}
+    <!-- inicio formulario Modal para Eliminar -->
+    <div class="modal fade" id="modall" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form name="frmEliminar" id="frmEliminar" method="POST" action="{{ ruta }}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Confirme Eliminar el Registto de {{ titulo }}.</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="id" value="">
+                        <input type="hidden" name="action" value="elim">
+
+                        <label>Proveedor:</label>
+                        <span id="descripcion"></span><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger" id="btnElimiar">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Final Formulario Modal-->
 {% endblock %}
 {% block jscript %}
     <script>
@@ -79,22 +118,47 @@
                     $('#descripcion').html(desc);
                     $('#frmEliminar #id').val(id);
                     swal({
-                      title: "Estas segura/o?",
-                      text: "Una vez eliminado, no podrá recuperar este archivo !\n Nombre:"+desc,
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true,
+                        title: "Estas segura/o?",
+                        text: "Una vez eliminado, no podrá recuperar este archivo !\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
                     })
-                    .then((willDelete) => {
-                      if (willDelete) {
-                       window.location = '{{ ruta }}?action=' + action + '&id=' + id;
-                      } else {
-                        swal("Tu archivo está a salvo!");
-                        return
-                      }
-                    });
-                 } else {
-                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                            } else {
+                                swal("Tu archivo está a salvo!");
+                                return
+                            }
+                        });
+                } else if(action == 'devoluci'){
+ var desc = $(this).parents('tr').children('td').eq(1).html();
+                    $('#descripcion').html(desc);
+                    swal({
+                        title: "Estas segura/o?",
+                        text: "Realizar la devolución de compra !\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        content: {
+                            element: "input",
+                            attributes: {
+                                placeholder: "Escribe el motivo de la eliminación",
+                                type: "text",
+                            },
+                        },
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            window.location = '{{ ruta }}?action=' + action + '&id=' + id+'&motivo='+$('.swal-content__input').val();
+
+                        } else {
+                            swal("Tu archivo está a salvo!");
+                            return
+                        }
+                    });;
+                } else {
+                    window.location = '{{ ruta }}?action=' + action + '&id=' + id;
                 }
 
             });

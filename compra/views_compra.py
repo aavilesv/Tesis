@@ -2,13 +2,15 @@ from django.db.models import Q
 import datetime
 import json
 from django.contrib.auth.decorators import login_required
-from Tesis.funciones import addUserData, MiPaginador
+from Tesis.funciones import addUserData, MiPaginador,render_to_pdf
 from django.db import transaction, IntegrityError
 from django.shortcuts import render,redirect
 from venta.models import  M_Producto
 from compra.models import  M_PROVEEDOR,T_Compra,T_Compradetalle
+from devolucion.models import T_DevolucionCompra,T_DevoluciondetalleCompra
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib import messages
 @login_required(login_url='/seguridad/login/')
 def compra(request):
     data = {
@@ -66,6 +68,12 @@ def compra(request):
             compra = T_Compra.objects.get(pk=request.GET['id'])
             compra.status=False
             compra.save()
+
+            for item in T_Compradetalle.objects.filter(t_compra=compra):
+                arct = (M_Producto.objects.get(pk=int(item.m_producto.id)))
+                arct.stock -= int(item.cantidad)
+                arct.save()
+
             return redirect('/compra/compra/')
 
         if action == 'ver':
@@ -73,6 +81,55 @@ def compra(request):
             data['compraa'] = T_Compra.objects.get(pk=request.GET['criterio'])
             data['detallee'] = T_Compradetalle.objects.filter(t_compra=data['compraa'])
             return render(request, 'compra/detalle_listado.html', data)
+        if action=='devoluci':
+            try:
+                with transaction.atomic():
+                    id = request.GET['id']
+                    motivo = request.GET['motivo']
+                    compra= T_Compra.objects.get(pk=id)
+                    compra.status = False
+                    compra.save()
+                    devolucion=T_DevolucionCompra()
+                    devolucion.t_compra=compra
+                    devolucion.fecha=compra.fecha
+                    devolucion.motivoanular = motivo
+                    devolucion.descuento = compra.descuento
+                    devolucion.subtotal = compra.subtotal
+                    devolucion.total = compra.total
+                    devolucion.user = request.user
+                    devolucion.status = compra.status
+                    devolucion.save()
+
+                    for item in T_Compradetalle.objects.filter(t_compra=compra):
+                        arct = (M_Producto.objects.get(pk=int(item.m_producto.id)))
+                        arct.stock += int(item.cantidad)
+                        arct.save()
+                    for item in T_Compradetalle.objects.filter(t_compra=compra):
+                        detalle =T_DevoluciondetalleCompra()
+                        detalle.t_devolucioncompra=devolucion
+                        detalle.cantidad = item.cantidad
+                        detalle.cantidaddev = item.cantidad
+                        detalle.subtotal = item.subtotal
+                        detalle.total = item.total
+                        detalle.m_producto = (M_Producto.objects.get(pk=int(item.m_producto.id)))
+                        detalle.save()
+                return redirect('/compra/compra/')
+            except Exception as ex:
+                messages.error(request, str(ex))
+    elif 'imprimeunidad' in request.GET:
+        id = request.GET['id']
+        v = T_Compra.objects.get(pk=int(id))
+        t = "0"
+        for i in range(9 - len(str(v.id))):
+            t += "0"
+        compra = {
+
+            'compra': T_Compradetalle.objects.filter(t_compra=T_Compra.objects.get(pk=id)).order_by('m_producto_id'),
+            'facturaa': v,
+            'model': 'Compra: ' + t + str(v.id)
+        }
+        pdf = render_to_pdf('compra/pdfcompraunidad.html', compra)
+        return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get cuando hay busqueda con criterio
         criterio = None

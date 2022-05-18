@@ -2,9 +2,11 @@ from django.db.models import Q
 import datetime
 import json
 from django.contrib.auth.decorators import login_required
-from Tesis.funciones import addUserData, MiPaginador
+from Tesis.funciones import addUserData, MiPaginador, render_to_pdf
 from django.db import transaction, IntegrityError
 from django.shortcuts import render,redirect
+
+from devolucion.models import T_DevolucionCompra,T_DevoluciondetalleCompra
 from venta.models import  M_Producto
 from compra.models import  M_PROVEEDOR,T_Compra,T_Compradetalle
 from django.http import HttpResponse
@@ -12,8 +14,8 @@ from django.contrib.auth.models import User
 @login_required(login_url='/seguridad/login/')
 def compra(request):
     data = {
-        'titulo': 'CONSULTA DE COMPPRA',
-        'model': 'COMPRA',
+        'titulo': 'CONSULTA DEVOLUCIÓN DE COMPPRA',
+        'model': 'DEVOLUCIÓN DE COMPRA',
         'ruta': '/devolucioncompras/compra/',
         'user': request.user.username,
     }
@@ -73,6 +75,20 @@ def compra(request):
             data['compraa'] = T_Compra.objects.get(pk=request.GET['criterio'])
             data['detallee'] = T_Compradetalle.objects.filter(t_compra=data['compraa'])
             return render(request, 'devolucioncompras/detalle_listado.html', data)
+    elif 'imprimeunidad' in request.GET:
+        id = request.GET['id']
+        v = T_DevolucionCompra.objects.get(pk=int(id))
+        t = "0"
+        for i in range(9 - len(str(v.id))):
+            t += "0"
+        compra = {
+
+            'compra': T_DevoluciondetalleCompra.objects.filter(t_devolucioncompra=T_DevolucionCompra.objects.get(pk=id)).order_by('m_producto_id'),
+            'facturaa': v,
+            'model': 'Compra: ' + t + str(v.id)
+        }
+        pdf = render_to_pdf('compra/pdfcompraunidad.html', compra)
+        return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get cuando hay busqueda con criterio
         criterio = None
@@ -103,7 +119,7 @@ def compra(request):
             data['criterio'] = criterio
         else:
             # La primera vez viaje por get sin criterio: consulta todos los datos
-            compras = T_Compra.objects.filter(status=True).order_by('-fecha')
+            compras = T_DevolucionCompra.objects.all().order_by('-fecha')
         data['compras'] = compras
         # Pagineo
         paging = MiPaginador(compras, 8)

@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="../static/css/bootstrap.min.css">
 <head>
     <title>Reporte de Compra</title>
+        <meta charset="utf-8">
     <style type="text/css">
         @page {
             size: a4 portrait;
@@ -77,8 +78,6 @@
 
 <!-- Content for Static Frame 'header_frame' -->
 
-<img src="../media/{{ empresa.image }}" class="img-circle grande imagess" alt="User Image">
-
 <div id="header_content">
     <div class="" >   <strong><h1 class="estilo">
         {{ model }}
@@ -93,9 +92,7 @@
 
 </tr>
 </table>
-<div class="estil" style="font-family:'Times New Roman'; font-size: 14px;">{{ empresa.nombre }} <br>Telefono:{{ empresa.celular }} <br>Email:{{ empresa.email }}
-    <br>
-</div>
+
 
 <table class="table table-striped table-bordered nowrap">
 <tr>
@@ -110,17 +107,17 @@
             <table class="tablee">
                 <tr class="thh">
                     <th> Sr.(es):</th>
-                    <td colspan="2"> {{ facturaa.proveedor.nombre }}</td>
+                    <td colspan="2"> {{ facturaa.m_proveedor.nombre }}</td>
                 </tr>
                 <tr class="thh">
                     <th>RUC/CI:</th>
-                    <td>{{ facturaa.proveedor.ced_ruc }}</td>
+                    <td>{{ facturaa.m_proveedor.ced_ruc }}</td>
                     <td><strong>Fecha:</strong></td>
-                    <td>{{ facturaa.fechacompra|date:"d M Y" }}</td>
+                    <td>{{ facturaa.fecharegistro|date:"d M Y" }}</td>
                 </tr>
                 <tr class="thh">
                     <th>Dirección:</th>
-                    <td colspan="2">{{ facturaa.proveedor.direccion }}</td>
+                    <td colspan="2">{{ facturaa.m_proveedor.direccion }}</td>
                 </tr>
             </table>
         </div>
@@ -133,16 +130,16 @@
                     <th scope="col">Articulo</th>
                     <th scope="col">Cantidad</th>
                     <th scope="col">V.Unit.</th>
-                    <th scope="col">V.I Total</th>
+                    <!--<th scope="col">V.I Total</th>-->
                 </tr>
                 </thead>
                 <tbody>
                 {% for detel in compra %}
                     <tr class="p-0 m-0">
-                        <td>{{ detel.articulo.nombre }}</td>
+                        <td>{{ detel.m_producto.nombre }}</td>
                         <td>{{ detel.cantidad }}</td>
                         <td>{{ detel.total }}</td>
-                        <td>{{ detel.preciototal }}</td>
+                      <!--  <td>{{ detel.total }}</td>-->
                     </tr>
                 {% empty %}
                     <tr>

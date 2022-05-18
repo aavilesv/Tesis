@@ -2,13 +2,7 @@
 {% block contenid %}
     <div class="row mt-4">
         <div class="col-12">
-            <div class="col-lg-6">
-                <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
-                   class="btn btn-success sbox">
-                    <i class="fa fa-plus"></i>
-                    Nuevo Registro
-                </a>
-            </div>
+
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
@@ -34,7 +28,7 @@
                         {% for compra in venta %}
                             <tr>
                                 <td class="text-sm font-weight-normal">{{ compra.id }}</td>
-                                <td class="text-sm font-weight-normal">{{ compra.m_cliente.nombre }}</td>
+                                <td class="text-sm font-weight-normal">{{ compra.t_factura.m_cliente.nombre }}</td>
                                 <td class="text-sm font-weight-normal">{{ compra.fecha }}</td>
                                 <td class="text-sm font-weight-normal">${{ compra.subtotal }}</td>
                                 <td class="text-sm font-weight-normal">${{ compra.total }}</td>
@@ -49,9 +43,6 @@
                                                 <i class="fa fa-print"> Imprimir</i>
                                             </a>
                                         </li> &nbsp;
-                                        <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
-                                               data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ compra.id }}"}'>
-                                            <i class="fa fa-ban"></i> Anular</a></li>
                                     </ul></td>
                             </tr>
                         {% empty %}

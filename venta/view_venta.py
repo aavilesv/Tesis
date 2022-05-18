@@ -10,6 +10,7 @@ import datetime
 import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from devolucion.models import T_DevolucionFactura,T_DevolucionDetalleFactura
 from venta.models import T_Factura,T_Facturadetalle,M_Producto,M_CLIENTE
 @login_required(login_url='/seguridad/login/')
 def venta(request):
@@ -87,6 +88,42 @@ def venta(request):
                 arct.stock += int(item.cantidad)
                 arct.save()
             return redirect('/venta/venta/')
+
+        if action=='devoluci':
+            try:
+                with transaction.atomic():
+                    id = request.GET['id']
+                    motivo = request.GET['motivo']
+                    compra= T_Factura.objects.get(pk=id)
+                    compra.status = False
+                    compra.save()
+                    devolucion=T_DevolucionFactura()
+                    devolucion.t_factura=compra
+                    devolucion.fecha=compra.fecha
+                    devolucion.motivoanular = motivo
+                    devolucion.descuento = compra.descuento
+                    devolucion.subtotal = compra.subtotal
+                    devolucion.total = compra.total
+                    devolucion.user = request.user
+                    devolucion.status = compra.status
+                    devolucion.save()
+
+                    for item in T_Facturadetalle.objects.filter(t_factura=compra):
+                        arct = (M_Producto.objects.get(pk=int(item.m_producto.id)))
+                        arct.stock -= int(item.cantidad)
+                        arct.save()
+                    for item in T_Facturadetalle.objects.filter(t_factura=compra):
+                        detalle =T_DevolucionDetalleFactura()
+                        detalle.t_devolucionfactura=devolucion
+                        detalle.cantidad = item.cantidad
+                        detalle.cantidaddev = item.cantidad
+                        detalle.subtotal = item.subtotal
+                        detalle.total = item.total
+                        detalle.m_producto = (M_Producto.objects.get(pk=int(item.m_producto.id)))
+                        detalle.save()
+                return redirect('/venta/venta/')
+            except Exception as ex:
+                messages.error(request, str(ex))
 
     elif 'imprimeunidad' in request.GET:
         id = request.GET['id']

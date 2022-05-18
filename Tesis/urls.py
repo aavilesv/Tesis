@@ -29,6 +29,7 @@ urlpatterns = [
     path('seguridad/', include('Seguridad.url')),
     path('compra/', include('compra.url')),
     path('venta/', include('venta.url')),
+    path('devolucion/', include('devolucion.url')),
     path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 
 ]

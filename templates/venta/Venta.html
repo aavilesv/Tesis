@@ -52,6 +52,11 @@
                                         <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
                                                data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ compra.id }}"}'>
                                             <i class="fa fa-ban"></i> Anular</a></li>
+                                        &nbsp;
+                                        <li><a class="btn btn-info" data-bs-toggle="modal" href="#modal"
+                                               rel="action" data-json='{"action":"devoluci","id":"{{ compra.id }}"}'>
+                                            <i class="fa fa-undo"></i> Devolución
+                                        </a></li>
                                     </ul></td>
                             </tr>
                         {% empty %}
@@ -99,7 +104,32 @@
                                 return
                             }
                         });
-                } else {
+                }else if(action == 'devoluci'){
+ var desc = $(this).parents('tr').children('td').eq(1).html();
+                    $('#descripcion').html(desc);
+                    swal({
+                        title: "Estas segura/o?",
+                        text: "Realizar la devolución de factura !\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        content: {
+                            element: "input",
+                            attributes: {
+                                placeholder: "Escribe el motivo de la eliminación",
+                                type: "text",
+                            },
+                        },
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            window.location = '{{ ruta }}?action=' + action + '&id=' + id+'&motivo='+$('.swal-content__input').val();
+
+                        } else {
+                            swal("Tu archivo está a salvo!");
+                            return
+                        }
+                    });;
+                }  else {
                     window.location = '{{ ruta }}?action=' + action + '&id=' + id;
                 }
 

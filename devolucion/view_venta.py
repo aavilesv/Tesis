@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import Q
+
+from devolucion.models import T_DevolucionFactura
 from venta.models import M_Producto
 from Tesis.funciones import addUserData, render_to_pdf
 from django.shortcuts import render, redirect
@@ -14,8 +16,8 @@ from venta.models import T_Factura,T_Facturadetalle,M_Producto,M_CLIENTE
 @login_required(login_url='/seguridad/login/')
 def venta(request):
     data ={
-        'titulo':'Consulta de ventas -FULL AUTO MILAGRO',
-        'model': 'Venta',
+        'titulo':'Consulta de Devolución ventas',
+        'model': 'Devolución Venta',
         'ruta':'/devolucionventas/venta/',
         'user': request.user.username,
     }
@@ -113,5 +115,5 @@ def venta(request):
         return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get
-        data['venta'] =  T_Factura.objects.filter(status=True).order_by('id')
+        data['venta'] =  T_DevolucionFactura.objects.all().order_by('id')
         return render(request, 'devolucionventas/Venta.html', data)
