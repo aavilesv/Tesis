@@ -4,7 +4,7 @@
 <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 <link rel="stylesheet" href="../static/css/bootstrap.min.css">
 <head>
-    <title>Reporte de Compra</title>
+    <title>Reporte de Devolución Compra</title>
         <meta charset="utf-8">
     <style type="text/css">
         @page {
@@ -94,9 +94,7 @@
 
 </tr>
 </table>
-<div class="estil" style="font-family:'Times New Roman'; font-size: 14px;">{{ empresa.nombre }} <br>Telefono:{{ empresa.celular }} <br>Email:{{ empresa.email }}
-    <br>
-</div>
+
 
 <table class="table table-striped table-bordered nowrap">
 <tr>
@@ -111,22 +109,27 @@
             <table class="tablee">
                 <tr class="thh">
                     <th> Sr.(es):</th>
-                    <td colspan="2"> {{ facturaa.proveedor.nombre }}</td>
+                    <td colspan="2"> {{ facturaa.t_compra.m_proveedor.nombre }}</td>
                 </tr>
                 <tr class="thh">
                     <th>RUC/CI:</th>
-                    <td>{{ facturaa.proveedor.ced_ruc }}</td>
+                    <td>{{ facturaa.t_compra.m_proveedor.ced_ruc }}</td>
                     <td><strong>Fecha:</strong></td>
-                    <td>{{ facturaa.fechacompra|date:"d M Y" }}</td>
+                    <td>{{ facturaa.fecha|date:"d M Y" }}</td>
                 </tr>
                 <tr class="thh">
                     <th>Dirección:</th>
-                    <td colspan="2">{{ facturaa.proveedor.direccion }}</td>
+                    <td colspan="2">{{ facturaa.t_compra.m_proveedor.direccion }}</td>
                 </tr>
+                <tr class="thh">
+                    <th>Motivo:</th>
+                    <td colspan="2">{{ facturaa.motivoanular }}</td>
+                </tr>
+
             </table>
         </div>
         <div class="panel panel-info">
-        <h2>Detalle de Compra</h2>
+        <h2>Detalle de devolución Compra</h2>
             <table id="" cellspacing="0"
                    class="table table-striped table-bordered nowrap">
                 <thead>
@@ -134,7 +137,7 @@
                     <th scope="col">Articulo</th>
                     <th scope="col">Cantidad</th>
                     <th scope="col">V.Unit.</th>
-                    <th scope="col">V.I Total</th>
+                    <!--<th scope="col">V.I Total</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -143,7 +146,7 @@
                         <td>{{ detel.articulo.nombre }}</td>
                         <td>{{ detel.cantidad }}</td>
                         <td>{{ detel.total }}</td>
-                        <td>{{ detel.preciototal }}</td>
+                        <!--<td>{{ detel.preciototal }}</td>-->
                     </tr>
                 {% empty %}
                     <tr>

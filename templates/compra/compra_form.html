@@ -319,6 +319,7 @@
 {% endblock %}{% block jscript %}
     <script>
         $(function () {
+
             $('#cbcliente').change(function () {
                 var cliente = $('#cbcliente option:selected').data('cjson');
                 $('#ruc').val(cliente.ruc);
@@ -337,6 +338,7 @@
                     document.getElementById("art-cantidad").max =  $('#art-cantidad').val();
 
                     $('#art-precio').val(articulo.precio);
+                     $('#art-precio').val($('#art-precio').val().replace(',', '.'));
                     $('#image').attr("src","/media/"+articulo.image);
                     $('#ref').attr("href","/media/"+articulo.image);
                 } else {

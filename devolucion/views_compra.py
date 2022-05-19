@@ -16,7 +16,7 @@ def compra(request):
     data = {
         'titulo': 'CONSULTA DEVOLUCIÓN DE COMPPRA',
         'model': 'DEVOLUCIÓN DE COMPRA',
-        'ruta': '/devolucioncompras/compra/',
+        'ruta': '/devolucion/compra/',
         'user': request.user.username,
     }
     addUserData(request, data)
@@ -85,9 +85,9 @@ def compra(request):
 
             'compra': T_DevoluciondetalleCompra.objects.filter(t_devolucioncompra=T_DevolucionCompra.objects.get(pk=id)).order_by('m_producto_id'),
             'facturaa': v,
-            'model': 'Compra: ' + t + str(v.id)
+            'model': 'Devolución: ' + t + str(v.id)
         }
-        pdf = render_to_pdf('compra/pdfcompraunidad.html', compra)
+        pdf = render_to_pdf('devolucioncompras/pdfcompraunidad.html', compra)
         return HttpResponse(pdf, content_type='application/pdf')
     else:
         # Viaja por get cuando hay busqueda con criterio

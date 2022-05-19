@@ -332,6 +332,7 @@
                 contsts =articulo.stock;
                 iddd = articulo.id;
                 $('#art-precio').val(articulo.precio);
+                 $('#art-precio').val($('#art-precio').val().replace(',', '.'));
                 $('#image').attr("src","/media/"+articulo.image);
                 $('#ref').attr("href","/media/"+articulo.image);
             } else {

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from devolucion.models import T_DevolucionFactura
+from devolucion.models import T_DevolucionFactura,T_DevolucionDetalleFactura
 from venta.models import M_Producto
 from Tesis.funciones import addUserData, render_to_pdf
 from django.shortcuts import render, redirect
@@ -18,7 +18,7 @@ def venta(request):
     data ={
         'titulo':'Consulta de Devolución ventas',
         'model': 'Devolución Venta',
-        'ruta':'/devolucionventas/venta/',
+        'ruta':'/devolucion/venta/',
         'user': request.user.username,
     }
     addUserData(request, data)
@@ -92,14 +92,14 @@ def venta(request):
 
     elif 'imprimeunidad' in request.GET:
         id = request.GET['id']
-        v=T_Factura.objects.get(pk=int(id))
+        v=T_DevolucionFactura.objects.get(pk=int(id))
         t = "0"
 
         factura = {
 
-            'venta': T_Facturadetalle.objects.filter(t_factura=T_Factura.objects.get(pk=id)).order_by('m_producto_id'),
+            'venta': T_DevolucionDetalleFactura.objects.filter(t_devolucionfactura=T_DevolucionFactura.objects.get(pk=id)).order_by('m_producto_id'),
             'facturaa':v,
-            'model': 'Factura: '+t+str(v.id)
+            'model': 'Devolución: '+t+str(v.id)
         }
         pdf = render_to_pdf('devolucionventas/pdffacturaunidad.html', factura)
         return HttpResponse(pdf, content_type='application/pdf')
