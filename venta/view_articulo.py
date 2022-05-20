@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 
 from Tesis.funciones import addUserData, render_to_pdf
 from django.db import transaction

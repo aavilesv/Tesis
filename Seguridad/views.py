@@ -1,17 +1,12 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.db.models.functions import Upper
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from psycopg2._psycopg import IntegrityError
 
 
 
 from Tesis.funciones import addUserData
-from django.db.models import FloatField
-from django.db.models import Sum, Count, Max,Min,Avg
 @login_required(login_url='/seguridad/login/')
 def index(request):
     data = {

@@ -1,13 +1,10 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from Tesis.funciones import addUserData, render_to_pdf
-import datetime
+from Tesis.funciones import addUserData
 
-import json
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
-from django.db import transaction, IntegrityError
+from django.db import transaction
 
 @login_required(login_url='/seguridad/login/')
 def perfil(request):

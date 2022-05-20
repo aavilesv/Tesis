@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from Tesis.funciones import addUserData, render_to_pdf
-import datetime
 import json
 from django.shortcuts import render, redirect
 from django.contrib import messages

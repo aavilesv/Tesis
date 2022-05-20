@@ -1,13 +1,9 @@
-from django.contrib.auth.models import User
-from django.db.models import Q
+
 
 from devolucion.models import T_DevolucionFactura,T_DevolucionDetalleFactura
-from venta.models import M_Producto
 from Tesis.funciones import addUserData, render_to_pdf
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.db import transaction ,IntegrityError
-from django.utils.html import strip_tags
 import datetime
 import json
 from django.contrib.auth.decorators import login_required

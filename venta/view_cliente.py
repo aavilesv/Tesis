@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from Tesis.funciones import addUserData, render_to_pdf
+from Tesis.funciones import addUserData
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import transaction
