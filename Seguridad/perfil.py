@@ -22,20 +22,13 @@ def perfil(request):
                 with transaction.atomic():
 
                     if action == 'edit':
-                        empleado = Empleado.objects.get(user=request.user)
-                        us=User.objects.get(pk=int(empleado.user.id))
+                        us=User.objects.get(pk=int(request.user.id))
                         if (request.POST['chancontr']) == '1':
                             us.set_password(request.POST['password'])
                         print(request.POST['username'])
                         us.username, us.email,us.first_name = request.POST['username'],request.POST['email'],request.POST['first_name']
                         us.last_name ,us.username= request.POST['last_name'], request.POST['username']
                         us.save()
-
-                        empleado.user,empleado.direcion,empleado.cedula   =us,request.POST['direcion'], request.POST['cedula']
-                        empleado.celular = request.POST['celular']
-                        if 'image' in request.FILES:
-                            empleado.image = request.FILES['image']
-                        empleado.save()
 
             except Exception as ex:
                 messages.error(request, str(ex))
@@ -44,8 +37,10 @@ def perfil(request):
         # Por primera vez viaja por Get
         if 'action' in request.GET:
             data['action'] = request.GET['action']
-            if not (request.GET['action'] == 'add' or request.GET['action'] == 'verificar'):
+            if not (request.GET['action'] == 'add'):
                 data['id'] = request.GET['id']
+                print(request.user.id)
+                print(User.objects.get(id=request.user.id))
                 data['empleado'] = User.objects.get(id=request.user.id)
             return render(request, 'seguridad/perfil_form.html', data)
         else:

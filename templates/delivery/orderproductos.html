@@ -1,0 +1,164 @@
+{% extends 'ProjectBody/Body.html' %}
+{% load static %}
+{% block contenid %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header pb-0">
+                    <div class="d-lg-flex">
+                        <div>
+                            <h5 class="mb-0">Todos los productos</h5>
+
+                        </div>
+                        <div class="ms-auto my-auto mt-lg-0 mt-4">
+                            <div class="ms-auto my-auto">
+                                <a href="./new-product.html" class="btn bg-gradient-primary btn-sm mb-0" target="_blank">+&nbsp; Añadir al carrito de compra</a>
+                                <!--<button type="button" class="btn btn-outline-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">
+                                    Import
+                                </button>-->
+                                <!--<div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog mt-lg-10">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalLabel">Import CSV</h5>
+                                                <i class="fas fa-upload ms-3"></i>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>You can browse your computer for a file.</p>
+                                                <input type="text" placeholder="Browse file..." class="form-control mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="importCheck" checked="">
+                                                    <label class="custom-control-label" for="importCheck">I accept the terms and conditions</label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn bg-gradient-primary btn-sm">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv" type="button" name="button">Export</button>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-0">
+                    <div class="table-responsive">
+                        <table class="table table-flush" id="datatable-search">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Tipo de Categoría</th>
+                                <th>Precio</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for art in articulo %}
+                            <tr>
+                                <td>
+
+                                    <div class="d-flex">
+                                        <div class="form-check my-auto">
+                                            <input class="form-check-input enviaotrocliente" type="checkbox" id="idinss{{ art.id }}"
+                                                    name="pedido{{ art.id }}" idnn="{{ art.id }}" >
+                                        </div>
+
+                                               <a href="/media/{{ art.image }}"
+                                               data-lightbox="mygallery"
+                                               data-title="{{ art.nombre }}">
+                                                <img class="w-10 ms-3" style="height: 90%;"
+                                                     src="/media/{{ art.image }}"
+                                             alt="hoodie"> <h6 class="ms-3 my-auto">{{ art.nombre }}</h6>
+                                            </a>
+
+                                    </a>
+                                    </div>
+                                </td>
+
+                                <td class="text-sm font-weight-normal">{{ art.m_marca.nombre }} {{ art.m_tipocategoria.descripcion }} {{ art.nombre }}</td>
+                                <td class="text-sm font-weight-normal">${{ art.precio}}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="100"> <center>No existen registros</center></td>
+                            </tr>
+                        {% endfor %}
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>SKU</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block jscript %}
+  <script>
+
+
+  $(".enviaotrocliente").click(function(){
+
+  var idn =parseInt($(this).attr("idnn"));
+
+  if ($('#idinss'+idn).attr('checked')){
+	    var item = { id: idn};
+            lista_clientescuentas .push(item);
+
+  }
+
+  if( $('.enviaotrocliente').is(':checked') ) {
+      alert('gola')
+  }
+});
+    if (document.getElementById('products-list')) {
+      const dataTableSearch = new simpleDatatables.DataTable("#products-list", {
+        searchable: true,
+        fixedHeight: false,
+        perPage: 7
+      });
+
+      document.querySelectorAll(".export").forEach(function(el) {
+        el.addEventListener("click", function(e) {
+          var type = el.dataset.type;
+
+          var data = {
+            type: type,
+            filename: "soft-ui-" + type,
+          };
+
+          if (type === "csv") {
+            data.columnDelimiter = "|";
+          }
+
+          dataTableSearch.export(data);
+        });
+      });
+    };
+       var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+{% endblock %}
