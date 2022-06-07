@@ -1,14 +1,18 @@
-from django.db.models import Q
+
 import datetime
+from django.db.models import Q
 import json
+from django.db import transaction, IntegrityError
+from django.http import HttpResponse
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from Tesis.funciones import addUserData, MiPaginador,render_to_pdf
-from django.db import transaction, IntegrityError
-from django.shortcuts import render,redirect
+
+
 from venta.models import  M_Producto
 from compra.models import  M_PROVEEDOR,T_Compra,T_Compradetalle
 from devolucion.models import T_DevolucionCompra,T_DevoluciondetalleCompra
-from django.http import HttpResponse
+
 from django.contrib.auth.models import User
 from django.contrib import messages
 @login_required(login_url='/seguridad/login/')

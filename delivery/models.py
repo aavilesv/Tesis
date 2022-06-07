@@ -10,7 +10,6 @@ class T_Pedido(models.Model):
     iva = models.DecimalField(decimal_places=2, max_digits=19, default=0)
     total = models.DecimalField(decimal_places=2, max_digits=19, default=0)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    m_cliente = models.ForeignKey(M_CLIENTE, on_delete=models.PROTECT)
     status = models.BooleanField(default=True)
     class Meta:
         verbose_name = 'Pedido de Clientes Articulo'

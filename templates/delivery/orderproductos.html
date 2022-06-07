@@ -14,9 +14,8 @@
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
-                                <button type="button" class="btn btn-sm bg-gradient-success mb-0" id="btn-registrar">
-                                    <i class="fas fa-plus pe-2"></i> Agregar Pedidos
-                                </button>
+
+                                <a class="btn btn-success mb-0" href="#" rel="action" data-json='{"action":"add"}'><i class="fa fa-shopping-bag"></i> Agregar Pedidos</a>
                             </div>
                         </div>
                     </div>
@@ -26,10 +25,10 @@
                         <div class="col-6">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-responsive table-striped"
-                                       id="websendeos" style="white-space: pre-line;">
+                                       style="white-space: pre-line;">
                                     <thead>
                                     <tr class="info">
-                                        <th>Caracteristica</th>
+                                        <th>Nombre</th>
                                         <th>Precio</th>
                                         <th>Cantidad</th>
                                         <th>Total</th>
@@ -110,13 +109,13 @@
                                                     <div class="form-check my-auto">
                                                         <input class="form-check-input enviaotrocliente" type="checkbox" data-json='{"descripcion":"{{ art.m_marca.nombre }} {{ art.m_tipocategoria.descripcion }} {{ art.nombre }}","id":"{{ art.id }}"}' name="pedido{{ art.id }}">
                                                     </div>
-                                                    <a href="/media/{{ art.image }}" data-lightbox="mygallery" data-title="{{ art.nombre }}">
+                                                    <a href="/media/{{ art.image }}" data-lightbox="mygallery" data-title="{{ art.nombre }}" title="Ver imagen">
                                                         <img class="w-10 ms-3" style="height: 90%;" src="/media/{{ art.image }}" alt="hoodie">
-                                                        <h6 class="ms-3 my-auto">{{ art.nombre }}</h6>
+                                                        <h7 class="ms-3 my-auto">{{ art.nombre }}</h7>
                                                     </a>
                                                 </div>
                                             </td>
-                                            <td class="text-sm font-weight-normal">{{ art.m_marca.nombre }} {{ art.m_tipocategoria.descripcion }} {{ art.nombre }}</td>
+                                            <td class="text-sm font-weight-normal">{{ art.m_marca.nombre }}  {{ art.nombre }}</td>
                                             <td class="text-sm font-weight-normal">${{ art.precio}}</td>
                                         </tr>
                                     {% empty %}
@@ -139,6 +138,8 @@
 {% endblock %}
 {% block jscript %}
     <script>
+        var _subtotal_ =0;
+        var _total_ =0;
         var lista_clientescuentas =[];
         $(".enviaotrocliente").click(function(){
             var data = $(this).data('json'),descripcion = data.descripcion, id = data.id;
@@ -171,19 +172,19 @@
         $('#btn-registrar').click(function(){
             alert('hola');
         });
-     function restar(id,precio) {
-                for (var i in lista_clientescuentas) {
-                    if (id == lista_clientescuentas[i].id) {
-                        if(lista_clientescuentas[i].cantidad >1){
-                            lista_clientescuentas[i].cantidad -=1;
-                            lista_clientescuentas[i].precio = precio;
-                            lista_clientescuentas[i].total = lista_clientescuentas[i].cantidad *precio;
-                            actualizar();
-                            presentar();
-                        }
+        function restar(id,precio) {
+            for (var i in lista_clientescuentas) {
+                if (id == lista_clientescuentas[i].id) {
+                    if(lista_clientescuentas[i].cantidad >1){
+                        lista_clientescuentas[i].cantidad -=1;
+                        lista_clientescuentas[i].precio = precio;
+                        lista_clientescuentas[i].total = lista_clientescuentas[i].cantidad *precio;
+                        actualizar();
+                        presentar();
                     }
                 }
             }
+        }
         function sumar(id,precio) {
             for (var i in lista_clientescuentas) {
                 if (id == lista_clientescuentas[i].id) {
@@ -209,6 +210,8 @@
             }
             $('#id_msubtotal').val(subtotal.toFixed(2));
             $('#id_mtotal').val(_total.toFixed(2));
+            _subtotal_ =subtotal.toFixed(2);
+            _total_ =_total.toFixed(2);
         }
         function eliminar(id) {
             for (var i in lista_clientescuentas) {
@@ -232,19 +235,69 @@
 
         function  presentar() {
             $('#tdetalle').html('');
-            for (var item of lista_clientescuentas){
+            for (var item of lista_clientescuentas) {
                 var tr = '<tr>';
                 tr += '<td id="des">' + item.descripcion + '</td>';
                 tr += '<td>$' + item.precio + '</td>';
                 tr += '<td>' + item.cantidad + '</td>';
                 tr += '<td>$' + item.total + '</td>';
-                tr +='<td class=""><button onclick="restar('+item.id+ ','+item.precio +')"  title="Restar"class="btn btn-warning"><i class="fa fa-minus"></i> </button></td>';
-                tr +='<td class=""><button onclick="sumar('+ item.id +','+item.precio +')"  title="Sumar +1"class="btn btn-success"><i class="fa fa-plus"></i> </button></td>';
-                tr +='<td class=""><button onclick="eliminar('+ item.id +')"  title="Eliminar"class="btn btn-danger"><i class="fa fa-trash-o"></i> </button></td>';
+                tr += '<td class=""><button onclick="restar(' + item.id + ',' + item.precio + ')"  title="Restar"class="btn btn-warning"><i class="fa fa-minus"></i> </button></td>';
+                tr += '<td class=""><button onclick="sumar(' + item.id + ',' + item.precio + ')"  title="Sumar +1"class="btn btn-success"><i class="fa fa-plus"></i> </button></td>';
+                tr += '<td class=""><button onclick="eliminar(' + item.id + ')"  title="Eliminar"class="btn btn-danger"><i class="fa fa-trash-o"></i> </button></td>';
                 tr += '</tr>';
                 $('#tdetalle').append(tr);
             }
+
         }
+        $('#contenedor').on('click', 'a[rel="action"]', function () {
+            if(_subtotal_!=0){
+
+
+            var data = $(this).data('json'),
+                action = data.action,
+                id = data.id;
+
+            swal({
+                title: "Estas segura/o?",
+                text: "¿Estas seguro de generar el pedido compra?",
+                icon: "info",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type:"GET",
+                            url: '/delivery/pedido/',
+                            data: {
+                                'action':'pedidocomprar', pedido: JSON.stringify(lista_clientescuentas),'subtotal':_subtotal_,'total':_total_
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.resp == true) {
+
+
+                                  //  swal("Registrar!","Compra realizada", "success")
+                                    //window.location.reload();
+                                    window.location = '{{ ruta }}?action=listadopedido';
+                                } else {
+                                    swal('Información!', data.mensaje);
+
+                                }
+                            }
+                        });
+                        //  window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+
+                    } else {
+                        swal("Tu archivo está a salvo!");
+                        return
+                    }
+                });
+            }else {
+                   swal("Por favor ingrese detalle del producto!");
+            }
+
+        });
         if (document.getElementById('products-list')) {
             const dataTableSearch = new simpleDatatables.DataTable("#products-list", {
                 searchable: true,
