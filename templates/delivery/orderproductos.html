@@ -10,10 +10,12 @@
                     <div class="d-lg-flex">
                         <div>
                             <h5 class="mb-0">Todos los productos</h5>
-
+                            <a style="border-radius: 0px" href="{{ ruta }}?action=listadopedido"
+                               class="btn btn-info mb-0"> <i class="fa fa-list"></i> Listado de tus pedidos</a>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
-                            <div class="ms-auto my-auto">
+
+                            <div class="text-end ms-auto">
 
                                 <a class="btn btn-success mb-0" href="#" rel="action" data-json='{"action":"add"}'><i class="fa fa-shopping-bag"></i> Agregar Pedidos</a>
                             </div>
@@ -253,48 +255,48 @@
             if(_subtotal_!=0){
 
 
-            var data = $(this).data('json'),
-                action = data.action,
-                id = data.id;
+                var data = $(this).data('json'),
+                    action = data.action,
+                    id = data.id;
 
-            swal({
-                title: "Estas segura/o?",
-                text: "¿Estas seguro de generar el pedido compra?",
-                icon: "info",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            type:"GET",
-                            url: '/delivery/pedido/',
-                            data: {
-                                'action':'pedidocomprar', pedido: JSON.stringify(lista_clientescuentas),'subtotal':_subtotal_,'total':_total_
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                if (data.resp == true) {
+                swal({
+                    title: "Estas segura/o?",
+                    text: "¿Estas seguro de generar el pedido compra?",
+                    icon: "info",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                type:"GET",
+                                url: '/delivery/pedido/',
+                                data: {
+                                    'action':'pedidocomprar', pedido: JSON.stringify(lista_clientescuentas),'subtotal':_subtotal_,'total':_total_
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.resp == true) {
 
 
-                                  //  swal("Registrar!","Compra realizada", "success")
-                                    //window.location.reload();
-                                    window.location = '{{ ruta }}?action=listadopedido';
-                                } else {
-                                    swal('Información!', data.mensaje);
+                                        //  swal("Registrar!","Compra realizada", "success")
+                                        //window.location.reload();
+                                        window.location = '{{ ruta }}?action=listadopedido';
+                                    } else {
+                                        swal('Información!', data.mensaje);
 
+                                    }
                                 }
-                            }
-                        });
-                        //  window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                            });
+                            //  window.location = '{{ ruta }}?action=' + action + '&id=' + id;
 
-                    } else {
-                        swal("Tu archivo está a salvo!");
-                        return
-                    }
-                });
+                        } else {
+                            swal("Tu archivo está a salvo!");
+                            return
+                        }
+                    });
             }else {
-                   swal("Por favor ingrese detalle del producto!");
+                swal("Por favor ingrese detalle del producto!");
             }
 
         });
