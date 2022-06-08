@@ -24,8 +24,8 @@
   <link id="pagestyle" href="{% static "css/soft-ui-dashboard.css" %}" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="canonical" href="https://getbootstrap.com/docs/4.3/components/spinners/">
-    <link rel="canonical" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 
+<link rel="stylesheet" href="{% static "css/dataTables.bootstrap5.min.css"%}">
         <link rel="stylesheet" href="{% static "css/lightbox.css"%}">
 <link href="{% static "css/select2.min.css"%}" rel="stylesheet" />
 <style>
@@ -352,8 +352,10 @@
   <script src="{% static "js/plugins/smooth-scrollbar.min.js" %}"></script>
   <!--<script src="{% static "js/plugins/datatables.js" %}"></script>-->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-       <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="{% static "js/jquery.dataTables.min.js" %}"></script>
+    <script src="{% static "js/dataTables.bootstrap5.min.js" %}"></script>
+
 
   <!-- Kanban scripts -->
   <script src="{% static "js/plugins/dragula/dragula.min.js" %}"></script>
