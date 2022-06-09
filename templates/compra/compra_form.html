@@ -2,7 +2,7 @@
 {% block contenid %}
     <div class="row mt-4">
         <div class="col-6 col-lg-6">
-            <div class="card">
+            <div class="card bordecard">
                 <div class="card-body">
                     <div class="row align-items-center px-2 mt-4 mb-2">
                         <div class="row">
@@ -29,17 +29,17 @@
 
                                 <div class="form-group">
                                     <label class="control-label" for="cbcliente">Cédula o nombre:</label>
-                                    <div class="col-md-10">
-                                        <select class="chosen-select form-control list" id="cbcliente"
-                                                data-placeholder="Seleccione Categoria">
-                                            <option value="" selected disabled hidden>Seleccione una Cédula o Nombre</option>
-                                            {% for p in proveedores %}
-                                                <option value="{{ p.id }}"
-                                                        data-cjson='{"ruc":"{{ p.nombre }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
-                                                        {{ 'selected' }} >{{ p.ced_ruc }} : {{ p.nombre }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+
+                                    <select class="chosen-select form-control list" id="cbcliente"
+                                            data-placeholder="Seleccione Categoria">
+                                        <option value="" selected disabled hidden>Seleccione una Cédula o Nombre</option>
+                                        {% for p in proveedores %}
+                                            <option value="{{ p.id }}"
+                                                    data-cjson='{"ruc":"{{ p.nombre }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
+                                                    {{ 'selected' }} >{{ p.ced_ruc }} : {{ p.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
@@ -97,16 +97,21 @@
             </div>
         </div>
         <div class="col-6 col-lg-6">
-            <div class="card">
+            <div class="card bordecard">
 
                 <div class="card-body">
                     <div class="card-header d-flex align-items-center border-bottom py-3">
+                        <div class="col-6">
+                                        <legend style="font-size: 15px;font-weight: bold">
+                                            Datos del Articulo
+                                        </legend>
+                                    </div>
                         <div class="text-end ms-auto">
 
-                            <button type="button" class="btn btn-sm bg-gradient-primary mb-0"  id="cancelar" onclick="window.location='{{ ruta }}'">
+                            <button type="button" class="btn btn-sm btn-danger mb-0"  id="cancelar" onclick="window.location='{{ ruta }}'">
                                 <i class="fa fa-undo"></i> Volver
                             </button>
-                            <button type="button" class="btn btn-sm bg-gradient-success mb-0" id="btn-registrar">
+                            <button type="button" class="btn btn-sm btn-success mb-0" id="btn-registrar">
                                 <i class="fas fa-plus pe-2"></i> Registar
                             </button>
 
@@ -121,22 +126,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
-                                          <legend style="font-size: 15px;font-weight: bold">
-                                    Datos del Articulo
-                                </legend>
-                                    </div>
-                                    <div class="col-6">
- <button class="btn btn-primary form-control"
-                                            id="btn-agregar" placeholder="" title="Insertar Articulo">
-                                        <i class="fa fa-cart-plus"> Insertar</i>
-                                    </button>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="form-group">
+                                          <div class="form-group">
                                 <label class="control-label" for="cbarticulo">Producto:</label>
                                 <select class="chosen-select form-control" id="cbarticulo"
                                         data-placeholder="Seleccione Articulo">
@@ -148,6 +138,19 @@
                                     {% endfor %}
                                 </select>
                             </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-info form-control"
+                                                id="btn-agregar" placeholder="" title="Insertar Articulo">
+                                            <i class="fa fa-cart-plus"> Insertar</i>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
                             <div class="row">
 
                                 <div class="col-6">
@@ -173,14 +176,14 @@
 
                                 </div>
                                 <div class="col-6">
-                                        <div class="form-group">
-                                <label  class="control-label" for="imagen">Imagen:</label>
-                                    <div class="pull-left image">
-                                        <center> <a href="/media/46871.jpg" id="ref" data-lightbox="mygallery" data-title="">
-                                            <img  src="/media/46871.jpg" id="image" title="ver imagen" class="img-fluid center" alt="Responsive image" style="width:100px; height:100px;"  ></a> </center>
-                                    </div>
+                                    <div class="form-group">
+                                        <label  class="control-label" for="imagen">Imagen:</label>
+                                        <div class="pull-left image">
+                                            <center> <a href="/media/46871.jpg" id="ref" data-lightbox="mygallery" data-title="">
+                                                <img  src="/media/46871.jpg" id="image" title="ver imagen" class="img-fluid center" alt="Responsive image" style="width:100px; height:100px;"  ></a> </center>
+                                        </div>
 
-                            </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -196,8 +199,8 @@
     </div>
     <div class="row mt-4">
         <div class="col-12 col-lg-12">
-            <div class="card">
-                <div class="card-body">
+            <div class="card bordecard">
+                <div class="card-body shadowcard">
                     <div class="row align-items-center px-2 mt-4 mb-2">
                         <legend style="font-size: 15px;font-weight: bold">Detalle de Articulo
                         </legend>
@@ -209,7 +212,7 @@
                                             <table class="table table-striped table-bordered table-responsive table-striped"
                                                    id="websendeos" style="white-space: pre-line;">
                                                 <thead>
-                                                <tr class="info">
+                                                <tr class="badge-dark">
                                                     <th>Caracteristica</th>
                                                     <th>Precio</th>
                                                     <th>Cantidad</th>
