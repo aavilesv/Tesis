@@ -34,7 +34,6 @@
                             <th>Descripción</th>
                             <th>Nombre</th>
                             <th>Precio</th>
-                            <th>Estado</th>
                             <th>Acción</th>
                         </tr>
                         </thead>
@@ -52,11 +51,7 @@
                                 <td class="text-sm font-weight-normal">{{ art.descripcion }}</td>
                                 <td class="text-sm font-weight-normal">{{ art.nombre }}</td>
                                 <td class="text-sm font-weight-normal">${{ art.precio}}</td>
-                                <td class="text-sm font-weight-normal">     {% if art.status %}
-                                                    <span class="badge  bg-gradient-success">Activo</span>
-                                                {% else %}
-                                                    <span class="badge  bg-gradient-danger">Inactivo</span>
-                                                {% endif %}</td>
+
                                 <td class="text-sm font-weight-normal">
                                     <br>
                                     <ul class="d-md-inline-flex list-inline">

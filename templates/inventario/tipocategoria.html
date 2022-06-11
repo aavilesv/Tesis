@@ -14,9 +14,9 @@
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
-                    <h5 class="mb-0">Marcas</h5>
+                    <h5 class="mb-0">Tipo de categoría</h5>
                     <p class="text-sm mb-0">
-                        Listado de Marcas
+                        Listado de tipos de categoría
                     </p>
                 </div>
             <div class="card-body">
@@ -32,7 +32,7 @@
                         <tbody>
                         {% for mar in marca %}
                             <tr>
-                                <td class="text-sm font-weight-normal">{{ mar.nombre }}</td>
+                                <td class="text-sm font-weight-normal">{{ mar.descripcion }}</td>
                                 <td class="text-sm font-weight-normal">     {% if mar.status %}
                                                     <span class="badge  bg-gradient-success">Activo</span>
                                                 {% else %}
@@ -44,7 +44,7 @@
                                         <li>
                                             <a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ mar.id }}"}'>
                                                 <i class="fa fa-edit"></i> Editar</a></li> &nbsp;
-                                      <!--  <li><a class="btn bg-gradient-danger" href="#modal" data-bs-toggle="modal" data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ mar.id }}"}'><i class="fa fa-trash-o"></i> Eliminar</a></li>-->
+                                        <!--<li><a class="btn bg-gradient-danger" href="#modal" data-bs-toggle="modal" data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ mar.id }}"}'><i class="fa fa-trash-o"></i> Eliminar</a></li>-->
                                     </ul></td>
                             </tr>
                         {% empty %}
