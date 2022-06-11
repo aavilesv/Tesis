@@ -210,7 +210,7 @@
                     if(lista_clientescuentas[i].cantidad >1){
                         lista_clientescuentas[i].cantidad -=1;
                         lista_clientescuentas[i].precio = precio;
-                        lista_clientescuentas[i].total = lista_clientescuentas[i].cantidad *precio;
+                        lista_clientescuentas[i].total = (lista_clientescuentas[i].cantidad *precio).toFixed(2);
                         actualizar();
                         presentar();
                     }
@@ -223,7 +223,7 @@
                     if(lista_clientescuentas[i].cantidad >0){
                         lista_clientescuentas[i].cantidad +=1;
                         lista_clientescuentas[i].precio = precio;
-                        lista_clientescuentas[i].total = lista_clientescuentas[i].cantidad *precio;
+                        lista_clientescuentas[i].total = (lista_clientescuentas[i].cantidad *precio).toFixed(2);
                         actualizar();
                         presentar();
                     }

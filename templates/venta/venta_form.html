@@ -330,6 +330,7 @@
                 contsts =articulo.stock;
                 iddd = articulo.id;
                 $('#art-precio').val(articulo.precio);
+                $('#art-precio').val($('#art-precio').val().replace(',', '.'));
                 $('#image').attr("src","/media/"+articulo.image);
                 $('#ref').attr("href","/media/"+articulo.image);
             } else {
@@ -437,7 +438,7 @@
                             this.venta.items[i].cantidad += item.cantidad;
                         }
                         this.venta.items[i].precio = item.precio;
-                        this.venta.items[i].subtotal = this.venta.items[i].cantidad * item.precio;
+                        this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad * item.precio).toFixed(2);
                         this.venta.items[i].total = (this.venta.items[i].subtotal ) + this.venta.items[i].iva;
                         return true;
                     }
@@ -450,7 +451,7 @@
                         if(document.getElementById("art-cantidad").max >this.venta.items[i].cantidad){
                             this.venta.items[i].cantidad +=1;
                             this.venta.items[i].precio = precio;
-                            this.venta.items[i].subtotal = this.venta.items[i].cantidad *precio;
+                            this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad *precio).toFixed(2);
                             this.venta.items[i].total = (this.venta.items[i].subtotal ) + this.venta.items[i].iva;
                             this.actualizar();
                             this.presentar();
@@ -468,8 +469,8 @@
                         if(this.venta.items[i].cantidad >1){
                             this.venta.items[i].cantidad -=1;
                             this.venta.items[i].precio = precio;
-                            this.venta.items[i].subtotal = this.venta.items[i].cantidad *precio;
-                            this.venta.items[i].total = (this.venta.items[i].subtotal ) + this.venta.items[i].iva;
+                            this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad *precio).toFixed(2);
+                            this.venta.items[i].total = ((this.venta.items[i].subtotal ) + this.venta.items[i].iva);
                             this.actualizar();
                             this.presentar();
                         }
@@ -488,8 +489,8 @@
                     this.venta.subtotal += item.subtotal-(item.subtotal*ivaa);
                     this.venta.total +=  item.subtotal;
                 }
-                $('#id_msubtotal').val('$'+this.venta.subtotal.toFixed(2));
-                $('#id_mtotal').val("$"+this.venta.total.toFixed(2));
+                $('#id_msubtotal').val('$'+parseFloat(this.venta.subtotal).toFixed(2));
+                $('#id_mtotal').val("$"+ parseFloat(this.venta.total).toFixed(2));
             },
             presentar: function () {
                 $('#tdetalle').html('');

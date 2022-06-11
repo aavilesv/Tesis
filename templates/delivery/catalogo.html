@@ -1,0 +1,136 @@
+{% extends 'ProjectBody/Body.html' %}
+{% load static %}
+{% block contenid %}
+ <div class="row mt-4">
+        <div class="col-12">
+           <div class="col-lg-6">
+                    <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
+                       class="btn btn-success sbox">
+                        <i class="fa fa-plus"></i>
+                        Nuevo Registro
+                    </a>
+                <a href="{{ ruta }}?imprime=imprimir" class="btn btn-info sbox" title="Imprimir"  target="_blank">
+                    <i class="fa fa-print"> Imprimir</i>
+                </a>
+                </div>
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header">
+                    <h5 class="mb-0">Productos</h5>
+                    <p class="text-sm mb-0">
+                        Listado de productos
+                    </p>
+                </div>
+            <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                   <table id="datatable-search" class="table table-striped"  style="width:100%">
+                        <thead class="badge-dark">
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Ubicación</th>
+                            <th>Marca</th>
+                            <th>Tipo de Categoría</th>
+                            <th>Descripción</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Acción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for art in articulo %}
+                            <tr>
+                                <td class="text-sm font-weight-normal">
+                                    <a href="/media/{{ art.image }}" data-lightbox="mygallery" data-title="{{ art.nombre }}">
+                                        <img  src="/media/{{ art.image }}" title="ver imagen" class="img-fluid center" alt="Responsive image" style="width:100px; height:100px;"  >
+                                    </a>
+                                </td>
+                              <td class="text-sm font-weight-normal">{{ art.m_ubicacion.descripcion }}</td>
+                                <td class="text-sm font-weight-normal">{{ art.m_marca.nombre }}</td>
+                                <td class="text-sm font-weight-normal">{{ art.m_tipocategoria.descripcion }}</td>
+                                <td class="text-sm font-weight-normal">{{ art.descripcion }}</td>
+                                <td class="text-sm font-weight-normal">{{ art.nombre }}</td>
+                                <td class="text-sm font-weight-normal">${{ art.precio}}</td>
+
+                                <td class="text-sm font-weight-normal">
+                                    <br>
+                                    <ul class="d-md-inline-flex list-inline">
+                                        <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ art.id }}"}'><i class="fa fa-edit"></i> Editar</a></li> &nbsp;
+                                        <li><a class="btn bg-gradient-danger" href="#modal" data-bs-toggle="modal" data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ art.id }}"}'><i class="fa fa-trash-o"></i> Eliminar</a></li>
+                                    </ul></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="100"> <center>No existen registros</center></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>    <!-- te ayuda no redireccionar la pagina verbatim -->
+    <!--
+{% verbatim %}
+    <div id="app">
+        {{ msg }}
+      <button class="btn btn-success btn-md" v-on:click="getArticles">Add 1</button>
+  <p>Se ha hecho clic en el botón de arriba {{ counter }} veces.</p>
+    </div>
+    {% endverbatim %}-->
+{% endblock %}
+
+{% block jscript %}
+    <script>
+/*swal("¡Bien!", "Has hecho clic en el botón :)", "success");*/
+
+
+
+/*
+swal({
+    title: "Venta realizada",
+    confirmButtonText: "Aceptar",
+});*/
+        $(function () {
+            {% if messages %}
+            {% endif %}
+            {% for message in messages %}
+                swal('Información!', '{{ message }}');
+            {% endfor %}
+            $('#contenedor').on('click', 'a[rel="action"]', function () {
+                var data = $(this).data('json'),
+                    action = data.action,
+                    id = data.id;
+                if (action == 'elim') {
+                    var desc = $(this).parents('tr').children('td').eq(5).html();
+                    $('#descripcion').html(desc);
+                    $('#frmEliminar #id').val(id);
+
+                    swal({
+                      title: "Estas segura/o?",
+                      text: "Una vez eliminado, no podrá recuperar este archivo!\n Nombre:"+desc,
+                      icon: "warning",
+                      buttons: true,
+                      dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                      if (willDelete) {
+
+                        window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+
+                      } else {
+                        swal("Tu archivo está a salvo!");
+                        return
+                      }
+                    });
+
+                }else {
+                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
