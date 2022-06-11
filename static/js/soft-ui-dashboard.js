@@ -222,7 +222,7 @@ if (document.querySelector('.fixed-plugin')) {
     var fixedPluginCard = document.querySelector('.fixed-plugin .card');
     var fixedPluginCloseButton = document.querySelectorAll('.fixed-plugin-close-button');
     var navbar = document.getElementById('navbarBlur');
-    var buttonNavbarFixed = document.getElementById('navbarFixed');
+    var buttonNavbarFixed = false;
 
     if (fixedPluginButton) {
         fixedPluginButton.onclick = function() {

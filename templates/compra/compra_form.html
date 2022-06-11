@@ -28,7 +28,7 @@
                             <div class="row">
 
                                 <div class="form-group">
-                                    <label class="control-label" for="cbcliente">Cédula o nombre:</label>
+                                    <label class="control-label" for="cbcliente">Nombre:</label>
 
                                     <select class="chosen-select form-control list" id="cbcliente"
                                             data-placeholder="Seleccione Categoria">
@@ -102,10 +102,10 @@
                 <div class="card-body">
                     <div class="card-header d-flex align-items-center border-bottom py-3">
                         <div class="col-6">
-                                        <legend style="font-size: 15px;font-weight: bold">
-                                            Datos del Articulo
-                                        </legend>
-                                    </div>
+                            <legend style="font-size: 15px;font-weight: bold">
+                                Datos del Articulo
+                            </legend>
+                        </div>
                         <div class="text-end ms-auto">
 
                             <button type="button" class="btn btn-sm btn-danger mb-0"  id="cancelar" onclick="window.location='{{ ruta }}'">
@@ -126,18 +126,18 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
-                                          <div class="form-group">
-                                <label class="control-label" for="cbarticulo">Producto:</label>
-                                <select class="chosen-select form-control" id="cbarticulo"
-                                        data-placeholder="Seleccione Articulo">
-                                    <option value="">Seleccione Producto</option>
-                                    {% for a in material  %}
-                                        <option value="{{ a.id }}"
-                                                data-ajson='{"id":"{{ a.id }}","precio":"{{ a.precio }}","image":"{{ a.image }}","stock":"{{ a.stock }}"}'>
-                                            {{ a.m_tipocategoria.descripcion }}, {{ a.m_marca.nombre }} , {{ a.nombre }} , {{ a.descripcion }}  </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="cbarticulo">Producto:</label>
+                                            <select class="chosen-select form-control" id="cbarticulo"
+                                                    data-placeholder="Seleccione Articulo">
+                                                <option value="">Seleccione Producto</option>
+                                                {% for a in material  %}
+                                                    <option value="{{ a.id }}"
+                                                            data-ajson='{"id":"{{ a.id }}","precio":"{{ a.precio }}","image":"{{ a.image }}","stock":"{{ a.stock }}"}'>
+                                                        {{ a.m_tipocategoria.descripcion }}, {{ a.m_marca.nombre }} , {{ a.nombre }} , {{ a.descripcion }}  </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-6">
                                         <button class="btn btn-info form-control"
@@ -240,7 +240,7 @@
                                                     <tr>
                                                         <td class="text-right">
                                                             <div class="form-group">
-                                                                <label class="control-label col-md-3" for="id_msubtotal">SUBTOTAL:&#36;</label>
+                                                                <label class="control-label" for="id_msubtotal">SUBTOTAL:</label>
                                                                 <div class="col-md-9">
                                                                     <input id="id_msubtotal" readonly="" class="form-control"
                                                                            type="text" placeholder="0.00" style="font-weight: bold" >
@@ -254,7 +254,7 @@
                                                         <td>
 
                                                             <div class="form-group">
-                                                                <label class="control-label col-md-3" for="id_miva">IVA:&#36;</label>
+                                                                <label class="control-label" for="id_miva">IVA:</label>
                                                                 <div class="col-md-9">
                                                                     <input type="text" class="form-control " name="id_miva" maxlength="40" readonly="" style="font-weight: bold; background: white;"
                                                                            id="id_miva"  required="true" placeholder="12%" >
@@ -265,7 +265,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="form-group">
-                                                                <label class="control-label col-md-3" for="id_mtotal">Total a Pagar:&#36;</label>
+                                                                <label class="control-label" for="id_mtotal">Total a Pagar:</label>
                                                                 <div class="col-md-9">
                                                                     <input type="text" class="form-control " name="id_mtotal" maxlength="40" readonly="" style="font-weight: bold; background: white;"
                                                                            id="id_mtotal"  required="true" placeholder="0.00" >
@@ -284,9 +284,7 @@
                                 </div>
 
                             </div>
-                            <div class="row">
 
-                            </div>
                         </div>
 
 
@@ -489,8 +487,8 @@
                     this.venta.subtotal += item.subtotal;
                     this.venta.total += (item.subtotal)*ivaa+ item.subtotal;
                 }
-                $('#id_msubtotal').val(this.venta.subtotal.toFixed(2));
-                $('#id_mtotal').val(this.venta.total.toFixed(2));
+                $('#id_msubtotal').val('$'+this.venta.subtotal.toFixed(2));
+                $('#id_mtotal').val("$"+this.venta.total.toFixed(2));
             },
             presentar: function () {
                 $('#tdetalle').html('');
