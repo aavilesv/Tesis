@@ -2,7 +2,10 @@
 {% load static %}
 {% block contenid %}
 
-
+    <!--<div id="TableList"></div>
+<a href="javascript:prevPage()" id="btn_prev">Prev</a>&nbsp;
+<a href="javascript:nextPage()" id="btn_next">Next</a><br>
+page: <span id="page"></span>-->
     <div class="card">
         <!-- Card header -->
         <div class="card-header">
@@ -21,7 +24,7 @@
                             <div class="card bordecard">
                                 <div class="card-header">
                                     <a href="/media/{{ art.image }}" data-lightbox="mygallery" data-title="{{ art.nombre }}">
-                                        <img  src="/media/{{ art.image }}" title="ver imagen" class="img-fluid center" alt="Responsive image"  style="width:100%; height:80%;" >
+                                        <img  src="/media/{{ art.image }}" title="ver imagen" class="center" alt="Responsive image"  style="width:300px; height:250px; object-fit: cover;" >
                                     </a>
                                 </div>
 
@@ -33,8 +36,7 @@
                                     <a class="card-title h5 d-block text-darker">
                                         Categoría: {{ art.m_tipocategoria.descripcion }}
                                     </a>
-                                    <p class="card-description mb-4">Descripción: {{ art.descripcion }}
-                                    </p>
+
                                     <div class="author align-items-center">
                                         <div class="row">
                                             <div class="col-6">
@@ -42,7 +44,7 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                                    <input class="form-check-input precioo" type="checkbox" data-json='{"descripcion":"{{ art.m_marca.nombre }} {{ art.m_tipocategoria.descripcion }} {{ art.nombre }}","id":"{{ art.id }}","precio":"{{ art.precio }}"}' id="flexSwitchCheckDefault">
                                                     <label class="form-check-label" for="flexSwitchCheckDefault">Generar Pedido</label>
                                                 </div>
                                             </div>
@@ -65,92 +67,43 @@
         </div>
     </div>
 
-
-
-
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="col-lg-6">
-                <a style="border-radius: 0px" href="#" rel="action" data-json='{"action": "add","id":""}'
-                   class="btn btn-success sbox">
-                    <i class="fa fa-plus"></i>
-                    Nuevo Registro
-                </a>
-                <a href="{{ ruta }}?imprime=imprimir" class="btn btn-info sbox" title="Imprimir"  target="_blank">
-                    <i class="fa fa-print"> Imprimir</i>
-                </a>
-            </div>
-            <div class="card">
-                <!-- Card header -->
-                <div class="card-header">
-                    <h5 class="mb-0">Productos</h5>
-                    <p class="text-sm mb-0">
-                        Listado de productos
-                    </p>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="datatable-search" class="table table-striped"  style="width:100%">
-                                <thead class="badge-dark">
-                                <tr>
-                                    <th>Imagen</th>
-                                    <th>Ubicación</th>
-                                    <th>Marca</th>
-                                    <th>Tipo de Categoría</th>
-                                    <th>Descripción</th>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                    <th>Acción</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for art in articulo %}
-                                    <tr>
-                                        <td class="text-sm font-weight-normal">
-                                            <a href="/media/{{ art.image }}" data-lightbox="mygallery" data-title="{{ art.nombre }}">
-                                                <img  src="/media/{{ art.image }}" title="ver imagen" class="img-fluid center" alt="Responsive image" style="width:100px; height:100px;"  >
-                                            </a>
-                                        </td>
-                                        <td class="text-sm font-weight-normal">{{ art.m_ubicacion.descripcion }}</td>
-                                        <td class="text-sm font-weight-normal">{{ art.m_marca.nombre }}</td>
-                                        <td class="text-sm font-weight-normal">{{ art.m_tipocategoria.descripcion }}</td>
-                                        <td class="text-sm font-weight-normal">{{ art.descripcion }}</td>
-                                        <td class="text-sm font-weight-normal">{{ art.nombre }}</td>
-                                        <td class="text-sm font-weight-normal">${{ art.precio}}</td>
-
-                                        <td class="text-sm font-weight-normal">
-                                            <br>
-                                            <ul class="d-md-inline-flex list-inline">
-                                                <li><a class="btn bg-gradient-info" href="#" rel="action" data-json='{"action":"edit","id":"{{ art.id }}"}'><i class="fa fa-edit"></i> Editar</a></li> &nbsp;
-                                                <li><a class="btn bg-gradient-danger" href="#modal" data-bs-toggle="modal" data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ art.id }}"}'><i class="fa fa-trash-o"></i> Eliminar</a></li>
-                                            </ul></td>
-                                    </tr>
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="100"> <center>No existen registros</center></td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>    <!-- te ayuda no redireccionar la pagina verbatim -->
-    <!--
-{% verbatim %}
-    <div id="app">
-        {{ msg }}
-      <button class="btn btn-success btn-md" v-on:click="getArticles">Add 1</button>
-  <p>Se ha hecho clic en el botón de arriba {{ counter }} veces.</p>
-    </div>
-    {% endverbatim %}-->
 {% endblock %}
 
 {% block jscript %}
     <script>
+      var _subtotal_ =0;
+        var _total_ =0;
+        var lista_clientescuentas =[];
+      $('.precioo').click(function(){
+      var data = $(this).data('json'),descripcion = data.descripcion, id = data.id;
+      var precio =data.precio;
+
+            if($(this).prop("checked") == true){
+                precio=precio.replace(',', '.').replace('$', '');
+                 alert(precio)
+                var item = new Object();
+                item.id =id;
+                item.precio = precio;
+                item.descripcion=descripcion;
+                item.cantidad =1;
+                item.total=precio;
+                /*if (!existe(item)) {
+                    lista_clientescuentas.push(item);
+                    actualizar();
+                    presentar();
+                }*/
+            }
+            else if($(this).prop("checked") == false){
+                for (var i in lista_clientescuentas) {
+                    if (lista_clientescuentas[i].id == id) {
+                        lista_clientescuentas.splice(i,1);
+                        actualizar();
+                        presentar();
+                    }
+                }
+            }
+      });
+
         /*swal("¡Bien!", "Has hecho clic en el botón :)", "success");*/
 
 
@@ -198,6 +151,78 @@
                 }
             });
         });
+
+         var data = [
+                {% for c in articulo %}
+                    [{number: '{{  c.nombre  }}'},{'descripcion': '{{c.descripcion}}'}, {'precio':'${{ c.precio }}'}],
+                {% endfor %}
+        ];
+         console.log(data)
+        var obj = [
+{ number: "Number 1"},
+{ number: "Number 2"},
+{ number: "Number 3"},
+{ number: "Number 4"},
+{ number: "Number 5"},
+{ number: "Number 6"},
+{ number: "Number 7"},
+{ number: "Number 8"},
+{ number: "Number 9"},
+{ number: "Number 10"},
+{ number: "Number 11"},
+{ number: "Number 12"},
+{ number: "Number 13"},
+{ number: "Number 14"},
+{ number: "Number 15"}
+];
+var current_page = 1;
+var obj_per_page = 3;
+function totNumPages()
+{
+    return Math.ceil(data.length / obj_per_page);
+}
+
+function prevPage()
+{
+    if (current_page > 1) {
+        current_page--;
+        change(current_page);
+    }
+}
+function nextPage()
+{
+    if (current_page < totNumPages()) {
+        current_page++;
+        change(current_page);
+    }
+}
+function change(page)
+{
+    var btn_next = document.getElementById("btn_next");
+    var btn_prev = document.getElementById("btn_prev");
+    var listing_table = document.getElementById("TableList");
+    var page_span = document.getElementById("page");
+    if (page < 1) page = 1;
+    if (page > totNumPages()) page = totNumPages();
+    listing_table.innerHTML = "";
+    for (var i = (page-1) * obj_per_page; i <= (page * obj_per_page); i++) {
+        listing_table.innerHTML += data[i].number + "<br>";
+    }
+    page_span.innerHTML = page;
+    if (page == 1) {
+        btn_prev.style.visibility = "hidden";
+    } else {
+        btn_prev.style.visibility = "visible";
+    }
+    if (page == totNumPages()) {
+        btn_next.style.visibility = "hidden";
+    } else {
+        btn_next.style.visibility = "visible";
+    }
+}
+window.onload = function() {
+    change(1);
+};
     </script>
 
 {% endblock %}
