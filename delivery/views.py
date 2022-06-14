@@ -87,4 +87,4 @@ def productos(request):
 
 
     data['articulo'] = M_Producto.objects.filter(status=True)
-    return  render(request, 'delivery/orderproductos.html', data)
+    return  render(request, 'delivery/listadopedidos.html', data)
