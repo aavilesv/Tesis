@@ -33,7 +33,9 @@
                                         {% for p in cliente %}
                                             <option value="{{ p.id }}"
                                                     data-cjson='{"nombre":"{{ p.nombre }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
-                                                    {{ 'selected' }} >{{ p.ced_ruc }} : {{ p.nombre }}</option>
+                                                    {% if  p.id ==  5 %}
+                                                        {{ 'selected' }}
+                                                    {% endif  %} >{{ p.ced_ruc }} : {{ p.nombre }}</option>
                                         {% endfor %}
                                     </select>
 
@@ -122,8 +124,8 @@
                                             <option value="">Seleccione Producto</option>
                                             {% for a in articul  %}
                                                 <option value="{{ a.id }}"
-                                                        data-ajson='{"id":"{{ a.id }}","precio":"{{ a.precio }}","image":"{{ a.image }}","stock":"{{ a.stock }}"}'>
-                                                    {{ a.m_tipocategoria.descripcion }}, {{ a.m_marca.nombre }} , {{ a.nombre }} , {{ a.descripcion }}  </option>
+                                                        data-ajson='{"id":"{{ a.m_producto.id }}","precio":"{{ a.m_producto.precio }}","image":"{{ a.m_producto.image }}","stock":"{{ a.m_producto.stock }}"}'>
+                                                    {{ a.m_producto.m_tipocategoria.descripcion }}, {{ a.m_producto.m_marca.nombre }} , {{ a.m_producto.nombre }} , {{ a.m_producto.descripcion }}  </option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -140,20 +142,20 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                        <label class="control-label" for="art-cantidad">Cantidad:</label>
+                                                <label class="control-label" for="art-cantidad">Cantidad:</label>
 
-                                        <input id="art-cantidad" class="form-control" required="true"
-                                               type="number"   min="1" max="100" placeholder="Cant"/>
+                                                <input id="art-cantidad" class="form-control" required="true"
+                                                       type="number"   min="1" max="100" placeholder="Cant"/>
 
-                                    </div>
+                                            </div>
                                         </div>
                                         <div class="col-6">
-                                              <div class="form-group">
-                                        <label  class="control-label" for="art-precio">Precio:</label>
-                                        <input id="art-precio" style="background-color: white;" disabled
-                                               class="form-control" type="text" required="true"
-                                               placeholder="Precio"/>
-                                    </div>
+                                            <div class="form-group">
+                                                <label  class="control-label" for="art-precio">Precio:</label>
+                                                <input id="art-precio" style="background-color: white;" disabled
+                                                       class="form-control" type="text" required="true"
+                                                       placeholder="Precio"/>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -193,80 +195,80 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-10">
-                                      <div class="col-xs-15">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered table-responsive table-striped"
-                                               id="websendeos" style="white-space: pre-line;">
-                                            <thead>
-                                             <tr class="badge-dark">
-                                                <th>Caracteristica</th>
-                                                <th>Precio</th>
-                                                <th>Cantidad</th>
-                                                <th>Total</th>
-                                                <th colspan="3" class="col-xs-1">Acción</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="tdetalle">
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="col-2">
-     <div class="col-xs-8 col-lg-offset-5">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">
-                                            <strong class="panel-title">Compra</strong>
-                                        </div>
+                                    <div class="col-xs-15">
                                         <div class="table-responsive">
                                             <table class="table table-striped table-bordered table-responsive table-striped"
-                                                   style="display: block;">
-                                                <tbody>
-
-                                                <tr>
-                                                    <td class="text-right">
-                                                        <div class="form-group">
-                                                            <label class="control-label col-md-3" for="id_msubtotal">SUBTOTAL:</label>
-                                                            <div class="col-md-9">
-                                                                <input id="id_msubtotal" readonly="" class="form-control"
-                                                                       type="text" placeholder="0.00" style="font-weight: bold" >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-
+                                                   id="websendeos" style="white-space: pre-line;">
+                                                <thead>
+                                                <tr class="badge-dark">
+                                                    <th>Caracteristica</th>
+                                                    <th>Precio</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Total</th>
+                                                    <th colspan="3" class="col-xs-1">Acción</th>
                                                 </tr>
-                                                <tr>
-
-                                                    <td>
-
-                                                        <div class="form-group">
-                                                            <label class="control-label" for="id_miva">IVA:</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control " name="id_miva" maxlength="40" readonly="" style="font-weight: bold; background: white;"
-                                                                       id="id_miva"  required="true" placeholder="12%" >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <label class="control-label col-md-3" for="id_mtotal">Total a Pagar:</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control " name="id_mtotal" maxlength="40" readonly="" style="font-weight: bold; background: white;"
-                                                                       id="id_mtotal"  required="true" placeholder="0.00" >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-
+                                                </thead>
+                                                <tbody id="tdetalle">
                                                 </tbody>
                                             </table>
                                         </div>
-
                                     </div>
                                 </div>
+                                <div class="col-2">
+                                    <div class="col-xs-8 col-lg-offset-5">
+                                        <div class="panel panel-info">
+                                            <div class="panel-heading">
+                                                <strong class="panel-title">Compra</strong>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-bordered table-responsive table-striped"
+                                                       style="display: block;">
+                                                    <tbody>
+
+                                                    <tr>
+                                                        <td class="text-right">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3" for="id_msubtotal">SUBTOTAL:</label>
+                                                                <div class="col-md-9">
+                                                                    <input id="id_msubtotal" readonly="" class="form-control"
+                                                                           type="text" placeholder="0.00" style="font-weight: bold" >
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>
+
+                                                            <div class="form-group">
+                                                                <label class="control-label" for="id_miva">IVA:</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control " name="id_miva" maxlength="40" readonly="" style="font-weight: bold; background: white;"
+                                                                           id="id_miva"  required="true" placeholder="12%" >
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-3" for="id_mtotal">Total a Pagar:</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control " name="id_mtotal" maxlength="40" readonly="" style="font-weight: bold; background: white;"
+                                                                           id="id_mtotal"  required="true" placeholder="0.00" >
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -288,6 +290,30 @@
 
 {% block jscript %}
     <script>
+
+        function pedido(){
+            var data = [
+                {% for c in articul %}
+                    [{'id': '{{   c.m_producto.id  }}'},{'precio': '{{ c.m_producto.precio }}'}, {'cantidad':'{{ c.cantidad }}'}, {'stock':'{{ c.m_producto.stock }}'}
+                        , {'descripcion':'{{ c.m_producto.m_tipocategoria.descripcion }}, {{ c.m_producto.m_marca.nombre }} , {{ c.m_producto.nombre }} , {{ c.m_producto.descripcion }}'}],
+                {% endfor %}
+            ];
+
+            for (var item of data) {
+                var precio_= item[1].precio;
+                _precio =  precio_.replace(',', '.');
+
+                var itemm= new Object();
+                itemm.id = parseInt(item[0].id);
+                itemm.precio =parseFloat(_precio);
+                itemm.descripcion = item[4].descripcion;
+                itemm.cantidad =parseInt(item[2].cantidad);
+                app.add(itemm);
+
+            }
+        }
+        /*
+       */
         $('#art-precio').val($('#art-precio').val().replace(',', '.'));
         $('#frm-additem').submit(function (e) {
 
@@ -509,5 +535,6 @@
                 }
             },
         }
+        pedido();
     </script>
 {% endblock %}

@@ -73,8 +73,11 @@ def venta(request):
         if action == 'pedidoend':
             idpedido = request.GET['id']
             data['idpedido'] =idpedido
-            data['cliente'] = M_CLIENTE.objects.filter(status=True)
-            data['articul'] = M_Producto.objects.filter(status=True)
+            pedido=T_Pedido.objects.get(pk=idpedido)
+            pedidoarticulo=T_Pedidoarticulo.objects.filter(pedido=pedido)
+
+            data['cliente'] = M_CLIENTE.objects.filter(status=True).order_by('id')
+            data['articul'] = pedidoarticulo
             data['fecha'] = datetime.date.today()
             return render(request, 'venta/pedidoventa.html', data)
 

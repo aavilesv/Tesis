@@ -14,7 +14,7 @@ class T_Pedido(models.Model):
     class Meta:
         verbose_name = 'Pedido de Clientes Articulo'
         verbose_name_plural = 'Pedido de Clientes articulos'
-        ordering = ['fecha']
+        ordering = ['-fecha']
 
 class T_Pedidoarticulo(models.Model):
 
@@ -27,5 +27,5 @@ class T_Pedidoarticulo(models.Model):
     class Meta:
         verbose_name = 'Pedido de detalle Articulo'
         verbose_name_plural = 'Pedido de detalle articulos'
-        ordering = ['id']
+        ordering = ['-id']
 
