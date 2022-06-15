@@ -464,7 +464,7 @@
                             this.venta.items[i].cantidad += item.cantidad;
                         }
                         this.venta.items[i].precio = item.precio;
-                        this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad * item.precio).toFixed(2);
+                        this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad * item.precio);
                         this.venta.items[i].total = (this.venta.items[i].subtotal ) + this.venta.items[i].iva;
                         return true;
                     }
@@ -477,7 +477,7 @@
                         if(document.getElementById("art-cantidad").max >this.venta.items[i].cantidad){
                             this.venta.items[i].cantidad +=1;
                             this.venta.items[i].precio = precio;
-                            this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad *precio).toFixed(2);
+                            this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad *precio);
                             this.venta.items[i].total = (this.venta.items[i].subtotal ) + this.venta.items[i].iva;
                             this.actualizar();
                             this.presentar();
@@ -495,7 +495,7 @@
                         if(this.venta.items[i].cantidad >1){
                             this.venta.items[i].cantidad -=1;
                             this.venta.items[i].precio = precio;
-                            this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad *precio).toFixed(2);
+                            this.venta.items[i].subtotal = parseFloat(this.venta.items[i].cantidad *precio);
                             this.venta.items[i].total = ((this.venta.items[i].subtotal ) + this.venta.items[i].iva);
                             this.actualizar();
                             this.presentar();
