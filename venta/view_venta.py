@@ -22,6 +22,51 @@ def venta(request):
     if 'action' in request.GET:
         action = request.GET['action']
         data['action'] = action
+        if action == 'cargaventapedido':
+            try:
+                with transaction.atomic():
+                    pedido =T_Pedido.objects.get(pk=int(request.GET['idpedido']))
+                    pedido.status=False
+                    pedido.save()
+                    ventajson = json.loads(request.GET['venta'])
+
+                    vent = T_Factura()
+                    vent.m_cliente = M_CLIENTE.objects.get(pk=int(ventajson['cliente']))
+                    vent.subtotal, vent.total = round(float(ventajson['subtotal'])), round(float(ventajson['total']))
+                    vent.fecha, vent.descuento = datetime.datetime.now(), 0
+                    vent.user = (request.user)
+                    vent.save()
+
+                    for item in ventajson['items']:
+
+                        if M_Producto.objects.filter(id=int(item['id'])).exists():
+                            detalle = T_Facturadetalle()
+                            detalle.t_factura, detalle.m_producto = vent, M_Producto.objects.get(pk=int(item['id']))
+                            detalle.cantidad, detalle.total = int(item['cantidad']), float(item['precio'])
+                            arct = M_Producto.objects.get(pk=int(item['id']))
+                            arct.stock -= int(item['cantidad'])
+                            arct.save()
+                            detalle.preciototal = round(float(item['precio']) * int(item['cantidad']))
+                            detalle.save()
+                    # asunto = 'Compra en Taller Herrera'
+                    # email_from = settings.EMAIL_HOST_USER
+                    # data['detalle'] = Detallecompra.objects.filter(factura=facturar)
+                    # data['empresa'] = Empresa.objects.get(user=request.user)
+                    # email_to = [cliente.email]
+                    # datos = {
+                    #     'factura': facturar,
+                    #     'detalle': Detallecompra.objects.filter(factura=facturar),
+                    #     'sucursal': Empresa.objects.get(user=request.user),
+                    # }
+                    # html_message = render_to_string('facturacion/correoenvio.html', datos)
+                    # plain_message = strip_tags(html_message)
+                    # send_mail(asunto, plain_message, email_from, email_to, html_message=html_message,
+                    #           fail_silently=True)
+                    return HttpResponse(json.dumps({"resp": True}), content_type="application/json")
+            except IntegrityError as ex:
+
+                return HttpResponse(json.dumps({"resp": False, "mensaje": str(ex)}),
+                                    content_type="application/json")
         if action == 'cargaventa':
             try:
                 with transaction.atomic():

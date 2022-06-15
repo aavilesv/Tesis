@@ -389,7 +389,7 @@
                                     type:"GET",
                                     url: '{{ ruta }}',
                                     data: {
-                                        'action':'cargaventa', venta: JSON.stringify(app.venta)
+                                        'action':'cargaventapedido', venta: JSON.stringify(app.venta),'idpedido':{{ idpedido }}
                                     },
                                     dataType: 'json',
                                     success: function (data) {
@@ -398,8 +398,7 @@
 
                                             swal("Registrar!","Factura realizada", "success")
 
-
-                                            window.location.reload();
+                                             window.location = '{{ ruta }}';
                                         } else {
                                             swal('Información!', data.mensaje);
 
