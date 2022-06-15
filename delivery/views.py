@@ -82,9 +82,10 @@ def productos(request):
                 return HttpResponse(json.dumps({"resp": False, "mensaje": str(ex)}),
                                     content_type="application/json")
         if action =='listadopedido':
-            data['pedido'] = T_Pedido.objects.filter(user=request.user)
+            data['pedido'] = T_Pedido.objects.filter(user=request.user,status=True).order_by('-id')
             return  render(request, 'delivery/listadopedidos.html', data)
 
 
-    data['articulo'] = M_Producto.objects.filter(status=True)
+    #data['articulo'] = M_Producto.objects.filter(status=True)
+    data['pedido'] = T_Pedido.objects.filter(user=request.user,status=True).order_by('fecha')
     return  render(request, 'delivery/listadopedidos.html', data)

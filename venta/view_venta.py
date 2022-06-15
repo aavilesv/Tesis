@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from devolucion.models import T_DevolucionFactura,T_DevolucionDetalleFactura
 from venta.models import T_Factura,T_Facturadetalle,M_Producto,M_CLIENTE
+from delivery.models import T_Pedido, T_Pedidoarticulo
 @login_required(login_url='/seguridad/login/')
 def venta(request):
     data ={
@@ -69,6 +70,13 @@ def venta(request):
             data['articul'] = M_Producto.objects.filter(status=True)
             data['fecha'] = datetime.date.today()
             return render(request, 'venta/venta_form.html', data)
+        if action == 'pedidoend':
+            idpedido = request.GET['id']
+            data['idpedido'] =idpedido
+            data['cliente'] = M_CLIENTE.objects.filter(status=True)
+            data['articul'] = M_Producto.objects.filter(status=True)
+            data['fecha'] = datetime.date.today()
+            return render(request, 'venta/pedidoventa.html', data)
 
             if action == 'ver':
                 id = request.GET['id']

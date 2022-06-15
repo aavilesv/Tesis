@@ -7,13 +7,99 @@
 <a href="javascript:nextPage()" id="btn_next">Next</a><br>
 page: <span id="page"></span>-->
     <div class="card">
-        <!-- Card header -->
-        <div class="card-header">
-            <h5 class="mb-0">Productos</h5>
-            <p class="text-sm mb-0">
-                Listado de productos
-            </p>
+    <!-- Card header -->
+    <div class="card-header pb-0">
+        <div class="d-lg-flex">
+            <div>
+                <h5 class="mb-0">Todos los productos</h5>
+
+            </div>
+            <div class="ms-auto my-auto mt-lg-0 mt-4">
+
+                <div class="text-end ms-auto">
+
+                    <a class="btn btn-success mb-0" href="#" rel="action" data-json='{"action":"add"}'><i class="fa fa-shopping-bag"></i> Agregar Pedidos</a>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="table-responsive bordecard">
+                <table class="table table-striped table-bordered table-responsive table-striped enddatatable"
+                       style="white-space: pre-line;">
+                    <thead>
+                    <tr class="info">
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Total</th>
+                        <th colspan="3" class="col-xs-1">Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tdetalle">
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <hr>
+            <div class="row">
+                <div class="col-xs-8 col-lg-offset-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <strong class="panel-title">Pedido</strong>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-responsive table-striped"
+                                   style="display: block;">
+                                <tbody>
+
+                                <tr>
+                                    <td class="text-right">
+                                        <div class="form-group">
+                                            <label class="control-label" for="id_msubtotal">SUBTOTAL:</label>
+                                            <div class="col-md-9">
+                                                <input id="id_msubtotal" readonly="" class="form-control"
+                                                       type="text" placeholder="0.00" style="font-weight: bold" >
+                                            </div>
+                                        </div>
+                                    </td>
+                                        <td>
+                                        <div class="form-group">
+                                            <label class="control-label" for="id_miva">IVA:</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control " name="id_miva" maxlength="40" readonly="" style="font-weight: bold; background: white;"
+                                                       id="id_miva"  required="true" placeholder="12%" >
+                                            </div>
+                                        </div>
+                                    </td>
+                                      <td>
+                                        <div class="form-group">
+                                            <label class="control-label" for="id_mtotal">Total a Pagar:</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control " name="id_mtotal" maxlength="40" readonly="" style="font-weight: bold; background: white;"
+                                                       id="id_mtotal"  required="true" placeholder="0.00" >
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <hr>
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -24,7 +110,7 @@ page: <span id="page"></span>-->
                             <div class="card bordecard">
                                 <div class="card-header">
                                     <a href="/media/{{ art.image }}" data-lightbox="mygallery" data-title="{{ art.nombre }}">
-                                        <img  src="/media/{{ art.image }}" title="ver imagen" class="center" alt="Responsive image"  style="width:300px; height:250px; object-fit: cover;" >
+                                        <img  src="/media/{{ art.image }}" title="ver imagen" class="center" alt="Responsive image"  style="width:200px; height:250px; object-fit: cover;" >
                                     </a>
                                 </div>
 
@@ -71,27 +157,26 @@ page: <span id="page"></span>-->
 
 {% block jscript %}
     <script>
-      var _subtotal_ =0;
+        var _subtotal_ =0;
         var _total_ =0;
         var lista_clientescuentas =[];
-      $('.precioo').click(function(){
-      var data = $(this).data('json'),descripcion = data.descripcion, id = data.id;
-      var precio =data.precio;
+        $('.precioo').click(function(){
+            var data = $(this).data('json'),descripcion = data.descripcion, id = data.id;
+            var precio =data.precio;
 
             if($(this).prop("checked") == true){
                 precio=precio.replace(',', '.').replace('$', '');
-                 alert(precio)
                 var item = new Object();
                 item.id =id;
                 item.precio = precio;
                 item.descripcion=descripcion;
                 item.cantidad =1;
                 item.total=precio;
-                /*if (!existe(item)) {
+                if (!existe(item)) {
                     lista_clientescuentas.push(item);
                     actualizar();
                     presentar();
-                }*/
+                }
             }
             else if($(this).prop("checked") == false){
                 for (var i in lista_clientescuentas) {
@@ -102,127 +187,150 @@ page: <span id="page"></span>-->
                     }
                 }
             }
-      });
+        });
+        function restar(id,precio) {
+            for (var i in lista_clientescuentas) {
+                if (id == lista_clientescuentas[i].id) {
+                    if(lista_clientescuentas[i].cantidad >1){
+                        lista_clientescuentas[i].cantidad -=1;
+                        lista_clientescuentas[i].precio = precio;
+                        lista_clientescuentas[i].total = (lista_clientescuentas[i].cantidad *precio).toFixed(2);
+                        actualizar();
+                        presentar();
+                    }
+                }
+            }
+        }
+        function sumar(id,precio) {
+            for (var i in lista_clientescuentas) {
+                if (id == lista_clientescuentas[i].id) {
+                    if(lista_clientescuentas[i].cantidad >0){
+                        lista_clientescuentas[i].cantidad +=1;
+                        lista_clientescuentas[i].precio = precio;
+                        lista_clientescuentas[i].total = (lista_clientescuentas[i].cantidad *precio).toFixed(2);
+                        actualizar();
+                        presentar();
+                    }
 
-        /*swal("¡Bien!", "Has hecho clic en el botón :)", "success");*/
+                }
+            }
+        }
+        function actualizar() {
+            var subtotal = 0;
+            var ivaa =0.12;
+            var descuento = 0;
+            var _total = 0;
+            for (var item of lista_clientescuentas) {
+                subtotal += item.total-(item.total*ivaa);
+                _total +=  parseFloat(item.total);
+            }
+            $('#id_msubtotal').val("$"+subtotal.toFixed(2));
+            $('#id_mtotal').val("$"+_total.toFixed(2));
+            _subtotal_ =subtotal.toFixed(2);
+            _total_ =_total.toFixed(2);
+        }
+        function eliminar(id) {
+            for (var i in lista_clientescuentas) {
+                if (lista_clientescuentas[i].id == id) {
+                    lista_clientescuentas.splice(i,1);
+                    actualizar();
+                    presentar();
+                    return true;
+                }
+            }
+            return false;
+        }
+        function  existe(item) {
+            for (var i in lista_clientescuentas) {
+                if (item.id == lista_clientescuentas[i].id) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
+        function  presentar() {
+            $('#tdetalle').html('');
+            for (var item of lista_clientescuentas) {
+                var tr = '<tr>';
+                tr += '<td id="des">' + item.descripcion + '</td>';
+                tr += '<td>$' + item.precio + '</td>';
+                tr += '<td>' + item.cantidad + '</td>';
+                tr += '<td>$' + item.total + '</td>';
+                tr += '<td class=""><button onclick="restar(' + item.id + ',' + item.precio + ')"  title="Restar"class="btn btn-warning"><i class="fa fa-minus"></i> </button></td>';
+                tr += '<td class=""><button onclick="sumar(' + item.id + ',' + item.precio + ')"  title="Sumar +1"class="btn btn-success"><i class="fa fa-plus"></i> </button></td>';
+             //   tr += '<td class=""><button onclick="eliminar(' + item.id + ')"  title="Eliminar"class="btn btn-danger"><i class="fa fa-trash-o"></i> </button></td>';
+                tr += '</tr>';
+                $('#tdetalle').append(tr);
 
+            }
 
-        /*
-        swal({
-            title: "Venta realizada",
-            confirmButtonText: "Aceptar",
-        });*/
+        }
+
         $(function () {
             {% if messages %}
             {% endif %}
             {% for message in messages %}
                 swal('Información!', '{{ message }}');
             {% endfor %}
-            $('#contenedor').on('click', 'a[rel="action"]', function () {
+
+        });
+  $('#contenedor').on('click', 'a[rel="action"]', function () {
+            if(_subtotal_!=0){
+
+
                 var data = $(this).data('json'),
                     action = data.action,
                     id = data.id;
-                if (action == 'elim') {
-                    var desc = $(this).parents('tr').children('td').eq(5).html();
-                    $('#descripcion').html(desc);
-                    $('#frmEliminar #id').val(id);
 
-                    swal({
-                        title: "Estas segura/o?",
-                        text: "Una vez eliminado, no podrá recuperar este archivo!\n Nombre:"+desc,
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    })
-                        .then((willDelete) => {
-                            if (willDelete) {
+                swal({
+                    title: "Estas segura/o?",
+                    text: "¿Estas seguro de generar el pedido compra?",
+                    icon: "info",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            $.ajax({
+                                type:"GET",
+                                url: '/delivery/pedido/',
+                                data: {
+                                    'action':'pedidocomprar', pedido: JSON.stringify(lista_clientescuentas),'subtotal':_subtotal_,'total':_total_
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.resp == true) {
 
-                                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
 
-                            } else {
-                                swal("Tu archivo está a salvo!");
-                                return
-                            }
-                        });
+                                        //  swal("Registrar!","Compra realizada", "success")
+                                        //window.location.reload();
+                                        window.location = '{{ ruta }}?action=listadopedido';
+                                    } else {
+                                        swal('Información!', data.mensaje);
 
-                }else {
-                    window.location = '{{ ruta }}?action=' + action + '&id=' + id;
-                }
-            });
+                                    }
+                                }
+                            });
+                            //  window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+
+                        } else {
+                            swal("Tu archivo está a salvo!");
+                            return
+                        }
+                    });
+            }else {
+                swal("Por favor ingrese detalle del producto!");
+            }
+
         });
-
-         var data = [
-                {% for c in articulo %}
-                    [{number: '{{  c.nombre  }}'},{'descripcion': '{{c.descripcion}}'}, {'precio':'${{ c.precio }}'}],
-                {% endfor %}
+        var data = [
+            {% for c in articulo %}
+                [{'number': '{{  c.nombre  }}'},{'descripcion': '{{c.descripcion}}'}, {'precio':'${{ c.precio }}'}],
+            {% endfor %}
         ];
-         console.log(data)
-        var obj = [
-{ number: "Number 1"},
-{ number: "Number 2"},
-{ number: "Number 3"},
-{ number: "Number 4"},
-{ number: "Number 5"},
-{ number: "Number 6"},
-{ number: "Number 7"},
-{ number: "Number 8"},
-{ number: "Number 9"},
-{ number: "Number 10"},
-{ number: "Number 11"},
-{ number: "Number 12"},
-{ number: "Number 13"},
-{ number: "Number 14"},
-{ number: "Number 15"}
-];
-var current_page = 1;
-var obj_per_page = 3;
-function totNumPages()
-{
-    return Math.ceil(data.length / obj_per_page);
-}
+        console.log(data)
 
-function prevPage()
-{
-    if (current_page > 1) {
-        current_page--;
-        change(current_page);
-    }
-}
-function nextPage()
-{
-    if (current_page < totNumPages()) {
-        current_page++;
-        change(current_page);
-    }
-}
-function change(page)
-{
-    var btn_next = document.getElementById("btn_next");
-    var btn_prev = document.getElementById("btn_prev");
-    var listing_table = document.getElementById("TableList");
-    var page_span = document.getElementById("page");
-    if (page < 1) page = 1;
-    if (page > totNumPages()) page = totNumPages();
-    listing_table.innerHTML = "";
-    for (var i = (page-1) * obj_per_page; i <= (page * obj_per_page); i++) {
-        listing_table.innerHTML += data[i].number + "<br>";
-    }
-    page_span.innerHTML = page;
-    if (page == 1) {
-        btn_prev.style.visibility = "hidden";
-    } else {
-        btn_prev.style.visibility = "visible";
-    }
-    if (page == totNumPages()) {
-        btn_next.style.visibility = "hidden";
-    } else {
-        btn_next.style.visibility = "visible";
-    }
-}
-window.onload = function() {
-    change(1);
-};
     </script>
 
 {% endblock %}
