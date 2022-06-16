@@ -291,7 +291,9 @@
                         <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-bell cursor-pointer"></i>
 
-                            <span class="icon-button__badge">{{ truepedidos.count }}</span>
+                            <span class="icon-button__badge">{% if truepedidos.count > 0  %}
+                                {{ truepedidos.count }}
+                            {% else %} 0 {% endif %}</span>
 
 
 
@@ -496,8 +498,17 @@
 
     })
     $(document).ready(function() {
-        $('#datatable-search').DataTable( {
-            "scrollX": true
+      $('#datatable-search').DataTable( {
+
+            scrollX: false,
+            scrollCollapse: false,
+          ordering: false,
+            paging: true,
+            columnDefs:[{
+                targets: "_all",
+                searchable: false
+            }],
+
         });
     } );
 </script>

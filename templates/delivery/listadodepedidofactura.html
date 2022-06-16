@@ -1,0 +1,132 @@
+{% extends 'ProjectBody/Body.html' %}
+{% block contenid %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="col-lg-6">
+                <a style="border-radius: 0px" href="{{ ruta }}" rel="action" data-json='{"action": "add","id":""}' title=""
+                       class="btn btn-info sbox">
+                        <i class="fa fa-backward">  Volver</i>
+
+                    </a>
+
+                </a>
+            </div>
+            <div class="card">
+                <!-- Card header -->
+                <div class="card-header">
+                    <h5 class="mb-0">Delivery</h5>
+                    <p class="text-sm mb-0">
+                        Listado de Facturas realizadas.
+                    </p>
+                </div>
+                <div class="table-responsive">
+                    <table  id="datatable-search" class="table table-striped"  style="width:100%">
+                        <thead class="badge-dark">
+                        <tr>
+                            <th>Código</th>
+                            <th>Cliente</th>
+                            <th>Fecha de Venta</th>
+                            <th>Subtotal</th>
+                            <th>Total</th>
+                            <th>Usuario creador</th>
+                            <th>Acción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for compra in venta %}
+                            <tr>
+                                <td class="text-sm font-weight-normal">{{ compra.id }}</td>
+                                <td class="text-sm font-weight-normal">{{ compra.m_cliente.nombre }}</td>
+                                <td class="text-sm font-weight-normal">{{ compra.fecha }}</td>
+                                <td class="text-sm font-weight-normal">${{ compra.subtotal }}</td>
+                                <td class="text-sm font-weight-normal">${{ compra.total }}</td>
+                                <td class="text-sm font-weight-normal">{{ compra.user.first_name }} {{ compra.user.last_name }}</td>
+                                <td class="text-sm font-weight-normal">
+                                    <br>
+                                    <ul class="d-md-inline-flex list-inline">
+                                        <li>
+                                            <a href="/venta/venta/?imprimeunidad=imprimir&id={{ compra.id }}" class="btn  btn-outline-info" data-original-title="Imprimir"  target="_blank">
+                                                <i class="fa fa-print"> Imprimir</i>
+                                            </a>
+                                        </li> &nbsp;
+
+                                    </ul></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="100"> <center>No existen registros</center></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block jscript %}
+    <script>
+
+        $(function () {
+            {% if messages %}
+            {% endif %}
+            {% for message in messages %}
+                swal('Información!', '{{ message }}');
+            {% endfor %}
+            $('#contenedor').on('click', 'a[rel="action"]', function () {
+                var data = $(this).data('json'),
+                    action = data.action,
+                    id = data.id;
+                if (action == 'elim') {
+                    var desc = $(this).parents('tr').children('td').eq(1).html();
+                    $('#descripcion').html(desc);
+                    $('#frmEliminar #id').val(id);
+                    swal({
+                        title: "Estas segura/o?",
+                        text: "Una vez eliminado, no podrá recuperar este archivo !\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                            } else {
+                                swal("Tu archivo está a salvo!");
+                                return
+                            }
+                        });
+                }else if(action == 'devoluci'){
+ var desc = $(this).parents('tr').children('td').eq(1).html();
+                    $('#descripcion').html(desc);
+                    swal({
+                        title: "Estas segura/o?",
+                        text: "Realizar la devolución de factura !\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        content: {
+                            element: "input",
+                            attributes: {
+                                placeholder: "Escribe el motivo de la eliminación",
+                                type: "text",
+                            },
+                        },
+                    }).then((willDelete) => {
+                        if (willDelete) {
+                            window.location = '{{ ruta }}?action=' + action + '&id=' + id+'&motivo='+$('.swal-content__input').val();
+
+                        } else {
+                            swal("Tu archivo está a salvo!");
+                            return
+                        }
+                    });;
+                }  else {
+                    window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                }
+
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -5,7 +6,7 @@ from Tesis.funciones import addUserData, render_to_pdf
 import json
 from django.utils import timezone
 from delivery.models import T_Pedido, T_Pedidoarticulo
-from venta.models import M_Producto,M_Marca,M_Ubicacion,M_TipoCategoria
+from venta.models import M_Producto, M_Marca, M_Ubicacion, M_TipoCategoria, T_Factura
 from django.db import transaction, IntegrityError
 
 from django.shortcuts import render,redirect
@@ -52,6 +53,17 @@ def productos(request):
     elif 'action' in request.GET:
         action = request.GET['action']
         data['action'] = action
+        if action == 'facturar':
+            if T_Pedido.objects.filter(status=False,user=request.user).exists():
+
+                pedido= T_Pedido.objects.filter(status=False,user=request.user)
+                #data['venta'] = T_Factura.objects.filter(Q(status=True) | Q(pedido=pedido.id)).order_by('-fecha')
+                #data['venta'] = T_Factura.objects.filter(status=True,pedido=pedido.id).order_by('-fecha')
+                data['venta'] = T_Factura.objects.filter(status=False).order_by('-fecha')
+
+                return render(request, 'delivery/listadodepedidofactura.html', data)
+            messages.error(request, str('Todavía no se realiza factura de su pedido'))
+            return redirect('/delivery/pedido/')
         if action == 'pedidocomprar':
             try:
                 with transaction.atomic():
@@ -82,10 +94,10 @@ def productos(request):
                 return HttpResponse(json.dumps({"resp": False, "mensaje": str(ex)}),
                                     content_type="application/json")
         if action =='listadopedido':
-            data['pedido'] = T_Pedido.objects.filter(user=request.user,status=True).order_by('-id')
+            data['pedido'] = T_Pedido.objects.filter(status=True).order_by('-fecha')
             return  render(request, 'delivery/listadopedidos.html', data)
 
 
     #data['articulo'] = M_Producto.objects.filter(status=True)
-    data['pedido'] = T_Pedido.objects.filter(user=request.user,status=True).order_by('fecha')
+    data['pedido'] = T_Pedido.objects.filter(status=True).order_by('-fecha')
     return  render(request, 'delivery/listadopedidos.html', data)

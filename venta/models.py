@@ -81,11 +81,14 @@ class T_Factura(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     m_cliente = models.ForeignKey(M_CLIENTE,on_delete=models.PROTECT)
     status = models.BooleanField(default=True)
+    pedido = models.IntegerField()
 
     class Meta:
         verbose_name = 'T_Factura'
         verbose_name_plural = 'T_Factura'
-        ordering = ['id']
+
+
+
 
 class T_Facturadetalle(models.Model):
     t_factura = models.ForeignKey(T_Factura,on_delete=models.PROTECT)

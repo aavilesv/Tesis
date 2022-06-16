@@ -1,17 +1,17 @@
 {% extends 'ProjectBody/Body.html' %}
 {% load static %}
 {% block contenid %}
- <div class="row mt-4">
+    <div class="row mt-4">
         <div class="col-12">
-           <div class="col-lg-6">
-                    <!--<a style="border-radius: 0px" href="{{ ruta }}" rel="action" data-json='{"action": "add","id":""}'
-                       class="btn btn-success sbox">
-                        <i class="fa fa-plus"></i>
-                        Nuevo Pedido
-                    </a>-->
+            <div class="col-lg-6">
+                <a style="border-radius: 0px" href="{{ ruta }}?action=facturar" rel="action" data-json='{"action": "add","id":""}' title=""
+                       class="btn btn-info sbox">
+                        <i class="fa fa-list">  Verificar Pedidos</i>
+
+                    </a>
 
                 </a>
-                </div>
+            </div>
             <div class="card">
                 <!-- Card header -->
                 <div class="card-header">
@@ -20,63 +20,67 @@
                         Listado de Pedidos
                     </p>
                 </div>
-            <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                      <table id="datatable-search" class="table table-striped"  style="width:100%">
-                        <thead class="badge-dark">
-                        <tr>
-                            <th>Código</th>
-                            <th>Fecha de Pedido</th>
-                            <th>Subtotal</th>
-                            <th>Total</th>
-                          
-                            <th>Acción</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for delivery in pedido %}
-                            <tr>
-                                <td class="text-sm font-weight-normal">{{ delivery.id }}</td>
-                                <td class="text-sm font-weight-normal">{{ delivery.fecha }}</td>
-                                <td class="text-sm font-weight-normal">{{ delivery.subtotal }}</td>
-                                <td class="text-sm font-weight-normal">${{ delivery.total }}</td>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table  id="datatable-search" class="table table-striped"  style="width:100%">
+                                <thead class="badge-dark">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Fecha de Pedido</th>
+                                    <th>Subtotal</th>
+                                    <th>Total</th>
+
+                                    <th>Acción</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for delivery in pedido %}
+                                    <tr>
+                                        <td class="text-sm font-weight-normal">{{ delivery.id }}</td>
+                                        <td class="text-sm font-weight-normal">{{ delivery.fecha }}</td>
+                                        <td class="text-sm font-weight-normal">{{ delivery.subtotal }}</td>
+                                        <td class="text-sm font-weight-normal">${{ delivery.total }}</td>
 
 
-                              <td class="text-sm font-weight-normal">
-                                    <br>
-                                    <ul class="d-md-inline-flex list-inline">
-  <li><a class="btn bg-gradient-warning"
-                                               href="/venta/venta/?action=pedidoend&id={{ delivery.id }}" >
-                                            <i class="fa fa-file-text"></i> Facturación</a></li>&nbsp;
-                                        <li>
+                                        <td class="text-sm font-weight-normal">
+                                            <br>
+                                            <ul class="d-md-inline-flex list-inline">
 
 
-                                        <li>
-                                            <a href="{{ ruta }}?imprimeunidad=imprimir&id={{ delivery.id }}" class="btn  btn-outline-info" data-original-title="Imprimir"  target="_blank">
-                                                <i class="fa fa-print"> Imprimir</i>
-                                            </a>
-                                        </li> &nbsp;
-                                       <!--   <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
+                                                {% if facturacion %}
+                                                    <li><a class="btn bg-gradient-warning"
+                                                           href="/venta/venta/?action=pedidoend&id={{ delivery.id }}" >
+                                                        <i class="fa fa-file-text"></i> Facturación</a></li>&nbsp;
+                                                    <li>
+                                                {% endif %}
+
+
+                                                <li>
+                                                    <a href="{{ ruta }}?imprimeunidad=imprimir&id={{ delivery.id }}" class="btn  btn-outline-info" data-original-title="Imprimir"  target="_blank">
+                                                        <i class="fa fa-print"> Imprimir</i>
+                                                    </a>
+                                                </li> &nbsp;
+                                                <!--   <li><a class="btn bg-gradient-warning" data-bs-toggle="modal"
                                                data-bs-target="#myModal" rel="action" data-json='{"action":"elim","id":"{{ delivery.id }}"}'>
                                             <i class="fa fa-ban"></i> Anular</a></li>&nbsp;
                                         <li><a class="btn btn-info" data-bs-toggle="modal" href="#modal"
                                                rel="action" data-json='{"action":"devoluci","id":"{{ delivery.id }}"}'>
                                             <i class="fa fa-undo"></i> Devolución
                                         </a></li>-->
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="100"> <center>No existen registros</center></td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="100"> <center>No existen registros</center></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
             </div>
         </div>
     </div>    <!-- te ayuda no redireccionar la pagina verbatim -->
@@ -92,15 +96,15 @@
 
 {% block jscript %}
     <script>
-/*swal("¡Bien!", "Has hecho clic en el botón :)", "success");*/
+        /*swal("¡Bien!", "Has hecho clic en el botón :)", "success");*/
 
 
 
-/*
-swal({
-    title: "Venta realizada",
-    confirmButtonText: "Aceptar",
-});*/
+        /*
+        swal({
+            title: "Venta realizada",
+            confirmButtonText: "Aceptar",
+        });*/
         $(function () {
             {% if messages %}
             {% endif %}
@@ -117,25 +121,25 @@ swal({
                     $('#frmEliminar #id').val(id);
 
                     swal({
-                      title: "Estas segura/o?",
-                      text: "Una vez eliminado, no podrá recuperar este archivo!\n Nombre:"+desc,
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true,
+                        title: "Estas segura/o?",
+                        text: "Una vez eliminado, no podrá recuperar este archivo!\n Nombre:"+desc,
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
                     })
-                    .then((willDelete) => {
-                      if (willDelete) {
+                        .then((willDelete) => {
+                            if (willDelete) {
 
-                        window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
 
-                      } else {
-                        swal("Tu archivo está a salvo!");
-                        return
-                      }
-                    });
+                            } else {
+                                swal("Tu archivo está a salvo!");
+                                return
+                            }
+                        });
 
                 }else {
-                window.location = '{{ ruta }}?action=' + action + '&id=' + id;
+                    window.location = '{{ ruta }}?action=' + action + '&id=' + id;
                 }
             });
         });

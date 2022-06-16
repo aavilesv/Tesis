@@ -35,7 +35,7 @@ class T_Compra(models.Model):
     class Meta:
         verbose_name = 'T_Compra'
         verbose_name_plural = 'T_Compra'
-        ordering = ['id']
+
 
 
 

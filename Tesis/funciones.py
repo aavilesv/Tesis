@@ -51,11 +51,12 @@ def addUserData(request, data):
     data['autor'] = NOMBRE_AUTOR
     data['grupos'] = ModuloGrupo.objects.filter(grupos__in=request.user.groups.all()).order_by('prioridad')
 
-
+    data['facturacion'] = False
     if T_Pedido.objects.filter(status=True).exists():
         segurid = User.groups.through.objects.get(user_id=request.user.id)
         if segurid.group.name == 'Gerente':
             data['truepedidos'] = T_Pedido.objects.filter(status=True)
+            data['facturacion']=True
     data['grupo'] = request.user.groups.all()[0]
 
 
