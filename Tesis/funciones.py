@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.utils.timezone import now
 from io import BytesIO
@@ -10,6 +11,8 @@ from django.contrib.staticfiles import finders
 
 from Tesis.config import LOGO_SISTEMA, NOMBRE_SISTEMA, NOMBRE_AUTOR, NOMBRE_INSTITUCION
 from Seguridad.models import ModuloGrupo
+from delivery.models import T_Pedido
+
 '''
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -47,7 +50,12 @@ def addUserData(request, data):
     data['institucion'] = NOMBRE_INSTITUCION
     data['autor'] = NOMBRE_AUTOR
     data['grupos'] = ModuloGrupo.objects.filter(grupos__in=request.user.groups.all()).order_by('prioridad')
-    #data['foto']=Empleado.objects.get(user=request.user)
+
+
+    if T_Pedido.objects.filter(status=True).exists():
+        segurid = User.groups.through.objects.get(user_id=request.user.id)
+        if segurid.group.name == 'Gerente':
+            data['truepedidos'] = T_Pedido.objects.filter(status=True)
     data['grupo'] = request.user.groups.all()[0]
 
 
