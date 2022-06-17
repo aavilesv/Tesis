@@ -35,7 +35,7 @@ def venta(request):
                     vent.subtotal, vent.total = round(float(ventajson['subtotal'])), round(float(ventajson['total']))
                     vent.fecha, vent.descuento = datetime.datetime.now(), 0
                     vent.user = (request.user)
-                    vent.pedido=pedido.id
+                    vent.pedido=pedido.user.id
                     vent.save()
 
                     for item in ventajson['items']:

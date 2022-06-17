@@ -55,12 +55,7 @@ def productos(request):
         data['action'] = action
         if action == 'facturar':
             if T_Pedido.objects.filter(status=False,user=request.user).exists():
-
-                pedido= T_Pedido.objects.filter(status=False,user=request.user)
-                #data['venta'] = T_Factura.objects.filter(Q(status=True) | Q(pedido=pedido.id)).order_by('-fecha')
-                #data['venta'] = T_Factura.objects.filter(status=True,pedido=pedido.id).order_by('-fecha')
-                data['venta'] = T_Factura.objects.filter(status=False).order_by('-fecha')
-
+                data['venta'] = T_Factura.objects.filter(status=True,pedido=request.user.id).order_by('-fecha')
                 return render(request, 'delivery/listadodepedidofactura.html', data)
             messages.error(request, str('Todavía no se realiza factura de su pedido'))
             return redirect('/delivery/pedido/')

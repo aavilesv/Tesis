@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from venta.models import M_Producto,M_CLIENTE
+from venta.models import M_Producto, M_CLIENTE, T_Factura
 from django.utils import timezone
 
 class T_Pedido(models.Model):
