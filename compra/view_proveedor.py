@@ -27,15 +27,21 @@ def proveedor(request):
             try:
                 with transaction.atomic():
                     if action == 'add':
+                        if not(M_PROVEEDOR.objects.filter(ced_ruc__icontains=request.POST['ced_ruc']).exists()):
+                            proveedo = M_PROVEEDOR()
+                            proveedo.direccion = request.POST['direccion']
+                            proveedo.email = request.POST['email']
+                            proveedo.nombre = request.POST['nombre']
+                            proveedo.ced_ruc = request.POST['ced_ruc']
+                            proveedo.telefono = request.POST['telefono']
+                            proveedo.sitioweb = request.POST['sitioweb']
+                            proveedo.save()
+                        else:
+                            messages.error(request, str('Ya se encuentra ese numero de cédula o Ruc'))
+                            return redirect('/compra/proveedores/?action=add&id=')
 
-                        proveedo = M_PROVEEDOR()
-                        proveedo.direccion = request.POST['direccion']
-                        proveedo.email = request.POST['email']
-                        proveedo.nombre = request.POST['nombre']
-                        proveedo.ced_ruc = request.POST['ced_ruc']
-                        proveedo.telefono = request.POST['telefono']
-                        proveedo.sitioweb = request.POST['sitioweb']
-                        proveedo.save()
+
+
 
                     if action == 'edit':
 

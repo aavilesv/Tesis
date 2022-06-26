@@ -27,11 +27,14 @@ def cliente(request):
             try:
                 with transaction.atomic():
                     if action == 'add':
-
-                        clien = M_CLIENTE()
-                        clien.direccion,clien.email,clien.nombre = request.POST['direccion'],request.POST['email'], request.POST['nombre']
-                        clien.ced_ruc, clien.telefono, clien.sitioweb = request.POST['ced_ruc'], request.POST['telefono'], request.POST['sitioweb']
-                        clien.save()
+                        if not(M_CLIENTE.objects.filter(ced_ruc__icontains=request.POST['ced_ruc']).exists()):
+                            clien = M_CLIENTE()
+                            clien.direccion,clien.email,clien.nombre = request.POST['direccion'],request.POST['email'], request.POST['nombre']
+                            clien.ced_ruc, clien.telefono, clien.sitioweb = request.POST['ced_ruc'], request.POST['telefono'], request.POST['sitioweb']
+                            clien.save()
+                        else:
+                            messages.error(request, str('Ya se encuentra ese numero de cédula o Ruc'))
+                            return redirect('/compra/proveedores/?action=add&id=')
 
                     if action == 'edit':
 

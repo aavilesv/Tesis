@@ -9,7 +9,7 @@
                 <div class="card">
 
                     <div class="card-body">
-                        <form  method="POST" action="{{ ruta }}" onsubmit="return todo()" enctype="multipart/form-data">
+                        <form  method="POST" action="{{ ruta }}" onsubmit="return todocedula()" enctype="multipart/form-data">
                             <div class="card-header d-flex align-items-center border-bottom py-3">
                                 <div class="text-center ms-auto">
                                     <h5 class="mb-0">Proveedor</h5>
@@ -44,18 +44,18 @@
                                 <div class="col-md-6">
                                     <div class="form-group has-success text-align-center">
                                         <label for="ced_ruc" class="control-label mb-1">Cédula:</label>
-                                        <input id="ced_ruc" name="ced_ruc" type="text"
+                                        <input id="cedula" name="ced_ruc" type="text"
                                                class="form-control cc-name valid" data-val="true"
                                                autocomplete="cc-name" value ='{{ proveedor.ced_ruc }}' minlength="10" maxlength="13" required="true" onKeyPress="return soloNumeros(event)">
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
-                                 <div class="col-md-6">
+                                <div class="col-md-6">
                                     <div class="form-group has-success text-align-center">
                                         <label for="sitioweb" class="control-label mb-1">Sitio web:</label>
                                         <input id="sitioweb" name="sitioweb" type="text"
                                                class="form-control cc-name valid" data-val="true"
-                                               autocomplete="cc-name" value ='{{ proveedor.sitioweb }}' minlength="5" maxlength="50" required="true">
+                                               autocomplete="cc-name" value ='{{ proveedor.sitioweb }}' minlength="5" maxlength="50">
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                         <label for="direccion" class="control-label mb-1">Dirección:</label>
                                         <input id="direccion" name="direccion" type="text"
                                                class="form-control cc-name valid" data-val="true"
-                                               autocomplete="cc-name" value ='{{ proveedor.direccion }}' minlength="5" maxlength="50" required="true">
+                                               autocomplete="cc-name" value ='{{ proveedor.direccion }}' minlength="5" maxlength="50">
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
@@ -75,7 +75,7 @@
                                         <label for="telefono" class="control-label mb-1">Celular:</label>
                                         <input id="telefono" name="telefono" type="text" minlength="6" maxlength="10"
                                                class="form-control cc-name valid" data-val="true"
-                                               autocomplete="cc-name" value ='{{ proveedor.telefono }}'  onKeyPress="return soloNumeros(event)" minlength="7" maxlength="10" required="true">
+                                               autocomplete="cc-name" value ='{{ proveedor.telefono }}'  onKeyPress="return soloNumeros(event)" minlength="7" maxlength="10">
                                         <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                     <div class="form-group">
                                         <label for="email" class="control-label mb-1">E-mail:</label>
                                         <input type="email" class="form-control " name="email" minlength="6" maxlength="50"
-                                               id="email" value ='{{ proveedor.email }}' required="true" >
+                                               id="email" value ='{{ proveedor.email }}'  >
                                     </div>
                                 </div>
 
@@ -97,6 +97,9 @@
 {% endblock %}
 {% block jscript %}
     <script type='text/javascript'>
+        {% for message in messages %}
+            swal('Información!', '{{ message }}');
+        {% endfor %}
         $('.chosen-select').chosen();
         $('#Dato').click(function(){
 
