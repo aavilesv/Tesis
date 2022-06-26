@@ -25,23 +25,42 @@
         }
 
 
-        .table{font-size: 12px;width:100%;margin-bottom:1rem;background-color:transparent;box-sizing: content-box;white-space:nowrap;border-spacing: 10px;
-            border-collapse: separate;  word-wrap: break-word;}
-        .table td,.table th{padding:.35rem;vertical-align:top;border-top:1px solid #dee2e6}
-        .table thead th{vertical-align:bottom;border-bottom:1px solid #dee2e6}
-        .table tbody+tbody{border-top:1px solid #dee2e6}.table .table{background-color:#fff}
-        .table-sm td,.table-sm th{padding:.1rem}.table-bordered{border:1px solid #dee2e6}
-        .table-bordered td,.table-bordered th{border:1px solid #dee2e6}
-        .table-bordered thead td,.table-bordered thead th{border-bottom-width:2px}
-        .table-borderless tbody+tbody,.table-borderless td,.table-borderless th,.table-borderless thead th{border:0}
-        .table-striped tbody tr:nth-of-type(odd){background-color:rgba(0,0,0,.05)}
+           table.table-bordered, table.table-bordered>thead>tr>th, table.table-bordered>tbody>tr>td {
+          border-top-width: 1pt;
+          border-top-style: solid;
+          border-top-color: #000000;
+          border-bottom-width: 1pt;
+          border-bottom-style: solid;
+          border-bottom-color: #000000;
+          border-left-width: 1pt;
+          border-left-style: solid;
+          border-left-color: #000000;
+          border-right-width: 1pt;
+          border-right-style: solid;
+          border-right-color: #000000;
+          padding-top: 12pt;
+          padding-right: 12pt;
+          padding-bottom: 12pt;
+          padding-left: 12pt;
+      }
+      .border-top {
+          border-top-width: 1pt;
+          border-top-style: solid;
+          border-top-color: #000000;
+      }
+      td th table {
+          width: 100%;
+          vertical-align: center;
+          text-align:center;
+      }
+      table {
+          margin-top:auto;
+          margin-right:auto;
+          margin-bottom:auto;
+          margin-left:auto;
+          display:block;
+      }
 
-        .table-info,.table-info>td,.table-info>th{background-color:#bee5eb}
-
-        tr td{
-            max-width:100%;
-            white-space:nowrap;
-        }
         .imagess{
             display: block;
             margin-left: 2px;
@@ -93,9 +112,7 @@
                                         <th>
                                              Descripción
                                         </th>
-                                        <th>
-                                          Descuento
-                                        </th>
+
                                         <th>
                                           Stock
                                         </th>
@@ -103,9 +120,7 @@
                                         <th><i class="fa fa-money">Precio</i>
 
                                         </th>
-                                        <th><i class="fa  fa-check-square-o">Estado</i>
 
-                                        </th>
                 </tr>
                 </thead>
                 <tbody>
@@ -115,17 +130,11 @@
                             <img src="../media/{{ articu.image }}" class="img-circle grande" alt="User Image"></td>
                         <td style="width: auto;">{{ articu.nombre }} {{ articu.marca.nombre }} </td>
                         <td class="p-2 m-0">{{ articu.descripcion }}</td>
-                        <td width="50">&#36;{{ articu.descuento }}</td>
+
                         <td width="75">{{ articu.stock }}</td>
 
                         <td width="75">&#36;{{ articu.precio }}</td>
-                        <td width="50">
-                            {% if articu.status %}
-                                <span class="badge badge-success">Activo</span>
-                            {% else %}
-                                <span class="badge badge-danger">Inactivo</span>
-                            {% endif %}
-                        </td>
+
                     </tr>
                 {% empty %}
                     <tr>

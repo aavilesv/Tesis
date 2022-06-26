@@ -23,23 +23,12 @@
         body {
             font-size: 20px;
         }
-        .table{font-size: 18px;width:100%;margin-bottom:1rem;background-color:transparent;box-sizing: content-box;white-space:nowrap;border-spacing: 10px;
-            border-collapse: separate;  word-wrap: break-word;}
-        .table td,.table th{padding:.35rem;vertical-align:auto;border-top:1px solid #dee2e6}
-        .table thead th{vertical-align:bottom;border-bottom:1px solid #dee2e6}
-        .table tbody+tbody{border-top:1px solid #dee2e6}.table .table{background-color:#fff}
-        .table-sm td,.table-sm th{padding:.1rem}.table-bordered{border:1px solid #dee2e6}
-        .table-bordered td,.table-bordered th{border:1px solid #dee2e6}
-        .table-bordered thead td,.table-bordered thead th{border-bottom-width:2px}
-        .table-borderless tbody+tbody,.table-borderless td,.table-borderless th,.table-borderless thead th{border:0}
-        .table-striped tbody tr:nth-of-type(odd){background-color:rgba(0,0,0,.05)}
 
-        .table-info,.table-info>td,.table-info>th{background-color:#bee5eb}
 
-        tr td{
-            max-width:100%;
-            white-space:nowrap;
-        }
+
+
+
+
         .imagess{
             display: block;
             margin-left: 2px;
@@ -75,6 +64,19 @@
             border-top: 2px solid #0c5460;    border-bottom: 1px solid #3fc3ee;
             padding: 6px;
             color: #344e86; }
+
+
+            /*class="table table-striped table-bordered nowrap"*/
+         .table{
+              border-collapse: separate;
+  border-spacing: 10px 5px;
+             align-content: center;
+             font-size: 14px;background-color:transparent;
+          }
+        .table td,.table th{border-top:1px solid #dee2e6}
+        .table thead th{border-bottom:1px solid #dee2e6}
+        .table tbody+tbody{border-top:1px solid #dee2e6}.table .table{background-color:#fff}
+        .table-sm td,.table-sm th{padding:.3rem}.table-bordered{border:1px solid #dee2e6}
     </style>
 </head>
 <body>
@@ -116,7 +118,7 @@
                     <th>RUC/CI:</th>
                     <td>{{ facturaa.m_proveedor.ced_ruc }}</td>
                     <td><strong>Fecha:</strong></td>
-                    <td>{{ facturaa.fecharegistro|date:"d M Y" }}</td>
+                    <td>{{ facturaa.fecha|date:"d M Y" }}</td>
                 </tr>
                 <tr class="thh">
                     <th>Dirección:</th>
@@ -130,7 +132,7 @@
                    class="table table-striped table-bordered nowrap">
                 <thead>
                 <tr class="table-info">
-                    <th scope="col">Articulo</th>
+                    <th scope="col">Artículo</th>
                     <th scope="col">Cantidad</th>
                     <th scope="col">V.Unit.</th>
                     <!--<th scope="col">V.I Total</th>-->
@@ -141,7 +143,7 @@
                     <tr class="p-0 m-0">
                         <td>{{ detel.m_producto.nombre }}</td>
                         <td>{{ detel.cantidad }}</td>
-                        <td>{{ detel.total }}</td>
+                        <td>${{ detel.total }}</td>
                       <!--  <td>{{ detel.total }}</td>-->
                     </tr>
                 {% empty %}
@@ -151,7 +153,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <table  class="table table-striped table-bordered nowrap" align = "center" style="width:50%" border="">
+            <table  class="table table-striped table-bordered nowrap" align = "center"  border="">
                 <tr>
                     <th colspan="2">FORMA DE PAGO</th>
                     <th rowspan="2" colspan="1"> Total</th>

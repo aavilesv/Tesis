@@ -183,11 +183,12 @@ def venta(request):
         id = request.GET['id']
         v=T_Factura.objects.get(pk=int(id))
         t = "0"
-
+        iva= float(v.total)- float(v.subtotal)
         factura = {
 
             'venta': T_Facturadetalle.objects.filter(t_factura=T_Factura.objects.get(pk=id)).order_by('m_producto_id'),
             'facturaa':v,
+            'iva':iva,
             'model': 'Factura: '+t+str(v.id)
         }
         pdf = render_to_pdf('venta/pdffacturaunidad.html', factura)
