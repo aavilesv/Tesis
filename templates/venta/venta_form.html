@@ -32,6 +32,7 @@
                                         <option value="" >Seleccione una Cédula o Nombre</option>
                                         {% for p in cliente %}
                                             <option value="{{ p.id }}"
+
                                                     data-cjson='{"nombre":"{{ p.nombre }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
                                                     {% if  p.id ==  5 %}
                                                         {{ 'selected' }}
