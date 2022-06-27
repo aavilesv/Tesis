@@ -41,7 +41,7 @@ def cliente(request):
                         clien = M_CLIENTE.objects.get(pk=int(request.POST['id']))
                         clien.direccion, clien.email, clien.nombre, clien.sitioweb  = request.POST['direccion'], request.POST['email'],request.POST['nombre'], request.POST['sitioweb']
                         clien.telefono=request.POST['telefono']
-                        clien.sitioweb = request.POST['ced_ruc']
+                        clien.ced_ruc = request.POST['ced_ruc']
                         clien.save()
 
 
