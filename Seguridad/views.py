@@ -7,14 +7,18 @@ from django.urls import reverse_lazy
 
 
 from Tesis.funciones import addUserData
+from venta.models import M_Producto
+
+
 @login_required(login_url='/seguridad/login/')
 def index(request):
     data = {
-        'titulo': 'Empresa -FULL AUTO MILAGRO',
+        'titulo': 'Empresa -Susanita',
         'name': 'Inicio',
         'saludo': 'Bienvenido',
     }
     addUserData(request,data)
+    data['producto'] = M_Producto.objects.filter(status=True)[:8]
     return render(request, 'main/index.html', data)
 
 
