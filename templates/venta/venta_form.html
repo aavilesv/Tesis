@@ -33,7 +33,9 @@
                                         {% for p in cliente %}
                                             <option value="{{ p.id }}"
                                                     data-cjson='{"nombre":"{{ p.nombre }}","cedula":"{{ p.ced_ruc }}","direc":"{{ p.direccion }}","email":"{{ p.email }}"}'
-                                                    {{ 'selected' }} >{{ p.ced_ruc }} : {{ p.nombre }}</option>
+                                                    {% if  p.id ==  5 %}
+                                                        {{ 'selected' }}
+                                                    {% endif  %}  >{{ p.ced_ruc }} : {{ p.nombre }}</option>
                                         {% endfor %}
                                     </select>
 
