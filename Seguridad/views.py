@@ -19,6 +19,7 @@ def index(request):
     }
     addUserData(request,data)
     data['producto'] = M_Producto.objects.filter(status=True)[:8]
+    print(data['grupos'])
     return render(request, 'main/index.html', data)
 
 
